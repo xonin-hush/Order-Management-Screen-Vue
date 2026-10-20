@@ -298,4 +298,11 @@ useEventListener(window, 'beforeunload', (event) => {
   grid-template-columns: 8rem 1fr;
   gap: 12px;
 }
+
+/* Below 360px (small phones, 400% zoom) side by side cut off "Unit price (IQD)" and the price. */
+@media (max-width: 359.98px) {
+  .item-numbers {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
