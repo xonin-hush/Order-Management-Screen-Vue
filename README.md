@@ -11,7 +11,9 @@ permission rules as the UI, adds 300–1000 ms of latency to every response, and
 | ![Order details](docs/order-details.png) | ![Mobile](docs/mobile-support.png) |
 
 The [project report (PDF)](docs/project-report.pdf) maps each requirement in the brief to the
-passing tests that prove it, with the latest test results.
+passing tests that prove it, with the latest test results. The two-page
+[stack and decisions (PDF)](docs/stack-and-decisions.pdf) explains the libraries and the reasoning
+behind them.
 
 ## Setup
 
@@ -115,12 +117,13 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
 
 ## Time spent
 
-About 4.5 hours in one session:
+About 5 hours in one session:
 
 - ~45 min reading the brief and deciding on the stack and the approach.
 - ~1 h setting up the project and building the features.
-- ~2.5 h reviewing and testing what was built, and fixing what came up.
-- ~30 min on this README, the screenshots and the project report.
+- ~2.5 h reviewing and testing what was built, and fixing what came up. Each fix went into the
+  commit it belonged to, so the history reads feature by feature.
+- ~45 min on this README, the screenshots and the two PDFs.
 
 ## AI assistance
 
