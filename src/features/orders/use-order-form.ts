@@ -95,5 +95,5 @@ export function useOrderForm(
     return unplaced
   }
 
-  return { form, total, isDirty, submit: () => submitForm(form), setServerErrors }
+  return { form, items, total, isDirty, submit: () => submitForm(form), setServerErrors }
 }

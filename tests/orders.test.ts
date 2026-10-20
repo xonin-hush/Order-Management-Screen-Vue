@@ -267,6 +267,22 @@ describe('creating and editing orders', () => {
     await waitFor(() => expect(router.currentRoute.value.name).toBe('order-details'))
   })
 
+  it('updates each line total as the amounts are typed', async () => {
+    const { user } = await renderAs('manager', '/orders/new')
+    const panel = await screen.findByRole('dialog', { name: 'New order' })
+    const item = within(panel).getByRole('group', { name: 'Item 1' })
+    const quantity = within(item).getByLabelText('Quantity')
+
+    await user.clear(quantity)
+    await user.type(quantity, '2')
+    await user.type(within(item).getByLabelText('Unit price (IQD)'), '25000')
+    expect(within(item).getByText(money(50_000))).toBeInTheDocument()
+
+    await user.clear(quantity)
+    await user.type(quantity, '3')
+    expect(within(item).getByText(money(75_000))).toBeInTheDocument()
+  })
+
   it('groups amounts as they are typed, and refuses decimals instead of dropping them', async () => {
     const { user } = await renderAs('manager', '/orders/new')
     const panel = await screen.findByRole('dialog', { name: 'New order' })

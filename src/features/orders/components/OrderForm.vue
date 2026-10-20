@@ -23,7 +23,7 @@ const route = useRoute()
 const router = useRouter()
 const { mutateAsync: createOrder, isPending: creating } = useCreateOrder()
 const { mutateAsync: updateOrder, isPending: updating } = useUpdateOrder()
-const { form, total, isDirty, submit, setServerErrors } = useOrderForm(props.order, {
+const { form, items, total, isDirty, submit, setServerErrors } = useOrderForm(props.order, {
   onSubmit: save,
   onInvalid: focusFirstError,
 })
@@ -198,7 +198,9 @@ useEventListener(window, 'beforeunload', (event) => {
         <fieldset>
           <legend class="section-title">Items</legend>
           <ol class="mt-4 d-flex flex-column ga-3">
-            <li v-for="(item, index) in itemsField.state.value" :key="item.key">
+            <!-- The form's store, not itemsField: an array field's slot only re-renders when items
+                 are added or removed, so line totals wouldn't follow what is typed. -->
+            <li v-for="(item, index) in items" :key="item.key">
               <v-card role="group" :aria-labelledby="`order-item-${item.key}-heading`" class="pa-4">
                 <div class="item-heading d-flex align-center justify-space-between ga-3">
                   <h3
