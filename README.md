@@ -10,6 +10,9 @@ permission rules as the UI, adds 300–1000 ms of latency to every response, and
 | --- | --- |
 | ![Order details](docs/order-details.png) | ![Mobile](docs/mobile-support.png) |
 
+The [project report (PDF)](docs/project-report.pdf) maps each requirement in the brief to the
+passing tests that prove it, with the latest test results.
+
 ## Setup
 
 Requires Node 22.18+ or 24.12+.
