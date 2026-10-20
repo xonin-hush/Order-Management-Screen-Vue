@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useEventListener } from '@vueuse/core'
 import { devToolsKey } from '@/app/dev-tools'
 import ConfirmDialogHost from '@/components/ui/ConfirmDialogHost.vue'
-import { TOKEN_STORAGE_KEY, useSessionStore } from '@/features/auth/session.store'
+import { useSessionSync } from '@/features/auth/session-sync'
+import { useSessionStore } from '@/features/auth/session.store'
 import { notifications, notificationsGeneration } from '@/lib/notify'
 import { useRouteFocus } from '@/lib/route-focus'
 
@@ -19,12 +19,7 @@ void router.isReady().then(() => {
 })
 
 useRouteFocus(router)
-
-// Another tab signed in or out: reload, so this tab never keeps acting as the previous user.
-useEventListener(window, 'storage', (event) => {
-  const tokenChanged = event.key === TOKEN_STORAGE_KEY || event.key === null // null: storage cleared
-  if (tokenChanged && event.newValue !== session.token) window.location.reload()
-})
+useSessionSync()
 
 // Permissions were re-read after a 403: re-run the guards on the current page.
 watch(
