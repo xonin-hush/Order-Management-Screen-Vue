@@ -25,7 +25,7 @@ defineEmits<{ retry: [] }>()
     {{ description }}
     <template v-if="retryable" #append>
       <v-btn size="small" :loading="retrying" :prepend-icon="mdiRefresh" @click="$emit('retry')">
-        Retry
+        Try again
       </v-btn>
     </template>
   </v-alert>
