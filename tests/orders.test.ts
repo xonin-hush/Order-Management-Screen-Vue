@@ -283,6 +283,25 @@ describe('creating and editing orders', () => {
     expect(within(item).getByText(money(75_000))).toBeInTheDocument()
   })
 
+  it('keeps the other items as they were when one in the middle is removed', async () => {
+    const { user } = await renderAs('manager', '/orders/new')
+    const panel = await screen.findByRole('dialog', { name: 'New order' })
+    const products = () =>
+      within(panel)
+        .getAllByRole('group', { name: /^Item \d+$/ })
+        .map((item) => within(item).getByLabelText<HTMLInputElement>('Product'))
+
+    await user.type(products()[0]!, 'Phone')
+    await user.click(within(panel).getByRole('button', { name: 'Add item' }))
+    await user.type(products()[1]!, 'Charger')
+    await user.click(within(panel).getByRole('button', { name: 'Add item' }))
+    await user.type(products()[2]!, 'Case')
+    await user.click(within(panel).getByRole('button', { name: 'Remove item 2' }))
+
+    expect(products().map((input) => input.value)).toEqual(['Phone', 'Case'])
+    await waitFor(() => expect(products()[1]).toHaveFocus())
+  })
+
   it('groups amounts as they are typed, and refuses decimals instead of dropping them', async () => {
     const { user } = await renderAs('manager', '/orders/new')
     const panel = await screen.findByRole('dialog', { name: 'New order' })

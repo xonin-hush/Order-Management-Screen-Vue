@@ -199,8 +199,10 @@ useEventListener(window, 'beforeunload', (event) => {
           <legend class="section-title">Items</legend>
           <ol class="mt-4 d-flex flex-column ga-3">
             <!-- The form's store, not itemsField: an array field's slot only re-renders when items
-                 are added or removed, so line totals wouldn't follow what is typed. -->
-            <li v-for="(item, index) in items" :key="item.key">
+                 are added or removed, so line totals wouldn't follow what is typed.
+                 Keyed by position, like the field names: a form.Field keeps the name it was
+                 created with, so rows keyed by item would show the wrong item after a removal. -->
+            <li v-for="(item, index) in items" :key="index">
               <v-card role="group" :aria-labelledby="`order-item-${item.key}-heading`" class="pa-4">
                 <div class="item-heading d-flex align-center justify-space-between ga-3">
                   <h3
