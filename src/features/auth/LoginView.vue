@@ -165,7 +165,7 @@ const roleLabel = (role: string) => role.charAt(0).toUpperCase() + role.slice(1)
                 variant="text"
                 border
                 class="demo-account"
-                :aria-label="`Use the ${roleLabel(account.role)} account, ${account.email}`"
+                :aria-label="`${roleLabel(account.role)}, ${account.email}`"
                 @click="useDemoAccount(account)"
               >
                 <span class="font-weight-medium">{{ roleLabel(account.role) }}</span>
