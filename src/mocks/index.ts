@@ -21,6 +21,7 @@ import {
 } from './orders'
 
 export { DEMO_ACCOUNTS } from './users'
+export { default as MockControls } from './MockControls.vue'
 
 type Method = 'get' | 'post' | 'put' | 'patch'
 
