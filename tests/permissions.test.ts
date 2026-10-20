@@ -113,6 +113,21 @@ describe('order actions', () => {
     expect(within(panel).queryByRole('button', { name: /Mark as/ })).not.toBeInTheDocument()
   })
 
+  it('ignore a second press while the status change is saving', async () => {
+    const order = seededOrder('pending')
+    const { user, mock } = await renderAs('manager', `/orders/${order.id}`, {
+      delay: ({ method }) => (method === 'patch' ? 300 : 0),
+    })
+    const panel = await screen.findByRole('dialog', { name: order.number })
+
+    await user.click(await within(panel).findByRole('button', { name: 'Mark as processing' }))
+    await user.keyboard('{Enter}') // the button keeps focus while its spinner shows
+
+    expect(await screen.findByText(`${order.number} marked as processing`)).toBeInTheDocument()
+    expect(mock.history.patch).toHaveLength(1)
+    expect(screen.queryByText(`Couldn't update ${order.number}`)).not.toBeInTheDocument()
+  })
+
   it('let admins cancel an order, after confirming', async () => {
     const order = seededOrder('shipped')
     const { user } = await renderAs('admin', `/orders/${order.id}`)

@@ -46,6 +46,8 @@ function keepFocusInPanel(button: HTMLElement) {
 }
 
 async function advance(status: OrderStatus, event: MouseEvent) {
+  // A loading v-btn still fires on Enter/Space, and the pressed button keeps focus.
+  if (busy.value) return
   const button = event.currentTarget as HTMLElement
   const { id, number } = props.order
   const label = STATUS_LABELS[status].toLowerCase()
@@ -71,6 +73,7 @@ async function advance(status: OrderStatus, event: MouseEvent) {
 }
 
 async function confirmCancel(event: MouseEvent) {
+  if (busy.value) return
   const button = event.currentTarget as HTMLElement
   const { id, number, customer } = props.order
 
