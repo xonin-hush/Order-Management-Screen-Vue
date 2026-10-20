@@ -1,0 +1,127 @@
+/*
+ * Global styles: only what more than one screen needs. Colours come from the Vuetify theme
+ * (src/plugins/vuetify.ts) as rgb(var(--v-theme-…)), and component looks from its defaults.
+ */
+
+/* Vuetify 4 no longer resets margins; the layouts here assume these elements have none. */
+@layer vuetify-core.reset {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ul,
+  ol,
+  dl,
+  dd,
+  fieldset {
+    margin: 0;
+  }
+
+  ul,
+  ol,
+  fieldset,
+  legend {
+    padding: 0;
+  }
+
+  /* Lists here are UI (cards, items, permissions), never bulleted text. */
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  fieldset {
+    border: 0;
+    min-width: 0;
+  }
+}
+
+:root {
+  --v-font-body:
+    'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Keep focused elements clear of the app bar and the floating Mock API button. */
+  scroll-padding-top: 4.5rem;
+  scroll-padding-bottom: 4rem;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* One consistent, highly visible focus indicator for keyboard users. */
+:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-focus));
+  outline-offset: 2px;
+}
+
+/* Text fields show focus with their own border. */
+.v-field input:focus-visible,
+.v-field textarea:focus-visible {
+  outline: none;
+}
+
+/* Programmatic focus targets (headings, panels, banners) aren't controls, so no ring. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/* Headings of the sections in a page or panel: "Customer", "Items", "Demo accounts". */
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+/* Inline code: permission names, the demo password. */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+}
+
+/* Digits that line up in columns and don't shift as values change. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lets a flex child shrink below its content, so long text truncates instead of overflowing. */
+.min-w-0 {
+  min-width: 0;
+}
+
+/* A page with one thing in its centre, outside the app layout: sign-in, account unavailable. */
+.centered-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 48px 16px;
+}
+
+/* The coloured dot before an order status, in badges and filter chips. */
+.status-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-inline-end: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Shorten motion and stop looping animations: a 1ms infinite spinner would just flicker. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
