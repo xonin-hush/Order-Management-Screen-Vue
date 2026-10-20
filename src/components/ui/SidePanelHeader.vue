@@ -9,7 +9,8 @@ const panel = inject(sidePanelKey)!
 </script>
 
 <template>
-  <header class="d-flex align-start ga-4 border-b px-5 px-sm-6 py-4">
+  <!-- Not <header>: outside <main> that is a second "banner" landmark while a panel is open. -->
+  <div class="d-flex align-start ga-4 border-b px-5 px-sm-6 py-4">
     <div class="flex-grow-1 min-w-0">
       <div class="d-flex flex-wrap align-center gc-3 gr-1">
         <!-- Programmatic focus target (see SidePanel); not interactive, so no focus ring. -->
@@ -35,5 +36,5 @@ const panel = inject(sidePanelKey)!
       class="me-n2 mt-n1"
       @click="panel.close()"
     />
-  </header>
+  </div>
 </template>
