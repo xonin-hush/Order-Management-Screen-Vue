@@ -93,8 +93,9 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
   rules Vuetify has no utility for are in `src/assets/main.css`. A style only one component uses
   stays scoped to it.
 - **No hand-written regex:** phone numbers go through libphonenumber-js, email through zod, amounts
-  through Vuetify's number input and mock routes through path-to-regexp. The one pattern left is
-  Vue Router's `:id(\d+)`, which only lets numeric ids into the order routes.
+  through Vuetify's number input and mock routes through path-to-regexp. The only patterns left
+  are Vue Router's route params: `:id(\d+)` only lets numeric ids into the order routes, and
+  `(.*)` catches every other address for the 404 page.
 - **Accessibility:** a table on desktop and cards on phones. Everything works by keyboard, and focus
   returns to the order's row when a panel closes.
 - **Mock data:** 50 deterministic orders kept in `localStorage`, so changes survive a reload.
