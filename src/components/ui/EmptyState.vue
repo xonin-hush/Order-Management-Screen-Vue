@@ -46,3 +46,14 @@ withDefaults(
     </template>
   </v-empty-state>
 </template>
+
+<style scoped>
+/* Vuetify pads the actions on every side, which left 16px more below the state than above it. */
+.v-empty-state {
+  padding-block: 32px;
+}
+
+.v-empty-state :deep(.v-empty-state__actions) {
+  padding-bottom: 0;
+}
+</style>
