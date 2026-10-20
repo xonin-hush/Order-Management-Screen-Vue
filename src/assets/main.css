@@ -64,6 +64,12 @@ body {
   outline: none;
 }
 
+/* Vuetify's placeholders are 2.3:1; the search field has no other visible label. 0.7 → 5.9:1. */
+.v-field input::placeholder,
+.v-field textarea::placeholder {
+  opacity: var(--v-medium-emphasis-opacity);
+}
+
 /* Programmatic focus targets (headings, panels, banners) aren't controls, so no ring. */
 [tabindex='-1']:focus {
   outline: none;
