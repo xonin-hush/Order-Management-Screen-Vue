@@ -46,7 +46,9 @@ async function resetData() {
 
 <template>
   <div class="mock-controls">
-    <v-menu location="top start" offset="8" :close-on-content-click="false">
+    <!-- Keeps Tab inside: opened over a side panel, the panel's focus trap would otherwise pull
+         focus back into the panel. -->
+    <v-menu location="top start" offset="8" :close-on-content-click="false" retain-focus>
       <template #activator="{ props: activator }">
         <v-btn
           v-bind="activator"
@@ -111,11 +113,26 @@ async function resetData() {
 </template>
 
 <style scoped>
+/* Above dialogs (2400) too, so failures can be armed with a side panel open; under toasts. */
 .mock-controls {
   position: fixed;
   inset-inline-start: 16px;
   bottom: 16px;
-  z-index: 1004;
+  z-index: 2450;
+}
+
+/* Where an open panel reaches this corner, stay clear of its footer (total, Save). Global as a
+   whole: Vue drops whatever follows a :global() part. */
+@media (max-width: 767.98px) {
+  :global(body:has(.side-panel.v-overlay--active .side-panel__footer) .mock-controls) {
+    bottom: 84px;
+  }
+
+  /* And leave room under the panel's content to scroll its end (Add item, Total) clear of this
+     button. This file only loads with the mock API, so a real backend's panels are unaffected. */
+  :global(body .side-panel__scroll) {
+    padding-bottom: 72px;
+  }
 }
 
 .mock-controls__panel {
