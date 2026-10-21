@@ -6,6 +6,8 @@ interface Notification {
   title: string
   text?: string
   prependIcon: string
+  /** A theme colour for the whole toast; Vuetify's dark default otherwise. */
+  color?: string
   /** Milliseconds on screen; -1 keeps it until dismissed. Vuetify's default is 5 s. */
   timeout?: number
 }
@@ -19,7 +21,7 @@ export const notificationsGeneration = ref(0)
 /**
  * Reports a failed action. Cancelled requests (e.g. after signing out) aren't failures.
  * Errors stay until dismissed: they say what to do next, and keyboard users can't reach a toast
- * to pause it while focus is trapped in a panel.
+ * to pause it while focus is trapped in a panel. In red, so one doesn't pass for a success.
  */
 export function notifyError(title: string, error: unknown) {
   if (isCancellation(error)) return
@@ -27,6 +29,7 @@ export function notifyError(title: string, error: unknown) {
     title,
     text: errorMessage(error),
     prependIcon: mdiAlertCircleOutline,
+    color: 'error',
     timeout: -1,
   })
 }
