@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
+import { useMediaQuery } from '@vueuse/core'
 import type { VTextField } from 'vuetify/components'
 import { mdiClose, mdiMagnify } from '@mdi/js'
 
@@ -11,6 +12,8 @@ const emit = defineEmits<{
 }>()
 
 const field = useTemplateRef<VTextField>('field')
+// Compact beside the status chips, but as tall as the other fields where it's tapped.
+const touch = useMediaQuery('(pointer: coarse)')
 
 function clear() {
   model.value = ''
@@ -31,7 +34,7 @@ function clear() {
       enterkeyhint="search"
       autocomplete="off"
       spellcheck="false"
-      density="compact"
+      :density="touch ? 'comfortable' : 'compact'"
       :prepend-inner-icon="mdiMagnify"
       class="search-field"
     >

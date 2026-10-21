@@ -25,7 +25,7 @@ import SkeletonLine from '@/components/ui/SkeletonLine.vue'
         <v-card class="mt-4 pa-4">
           <div class="d-flex align-center justify-space-between heading">
             <SkeletonLine :width="56" />
-            <SkeletonLine :width="80" :height="28" class="rounded-lg" />
+            <SkeletonLine :width="80" :height="28" class="skeleton-button rounded-lg" />
           </div>
           <div class="field mt-3"><SkeletonLine :width="72" /></div>
           <div class="numbers mt-4">
@@ -40,8 +40,8 @@ import SkeletonLine from '@/components/ui/SkeletonLine.vue'
     <div class="side-panel__footer d-flex align-center justify-space-between ga-3">
       <SkeletonLine :width="120" :height="20" />
       <div class="d-flex ga-2">
-        <SkeletonLine :width="84" :height="36" class="rounded-lg" />
-        <SkeletonLine :width="124" :height="36" class="rounded-lg" />
+        <SkeletonLine :width="84" :height="36" class="skeleton-button rounded-lg" />
+        <SkeletonLine :width="124" :height="36" class="skeleton-button rounded-lg" />
       </div>
     </div>
   </div>
@@ -67,10 +67,22 @@ import SkeletonLine from '@/components/ui/SkeletonLine.vue'
   min-height: 32px;
 }
 
-/* Like the item's quantity and price fields. */
+/* Like the item's quantity and price fields, at every width. */
 .numbers {
   display: grid;
   grid-template-columns: 8rem 1fr;
   gap: 12px;
+}
+
+@media (pointer: coarse) {
+  .numbers {
+    grid-template-columns: 10rem 1fr;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .numbers {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

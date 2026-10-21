@@ -17,7 +17,7 @@ const options: { value: OrderStatus | null; label: string }[] = [
   <fieldset class="min-w-0">
     <legend class="d-sr-only">Filter by status</legend>
     <!-- Wraps rather than scrolls: every status stays visible and reachable on small screens. -->
-    <div class="d-flex flex-wrap ga-2">
+    <div class="status-options d-flex flex-wrap ga-2">
       <label v-for="option in options" :key="option.label" class="status-option">
         <input v-model="model" type="radio" name="status" :value="option.value" class="d-sr-only" />
         <v-chip
@@ -42,6 +42,21 @@ const options: { value: OrderStatus | null; label: string }[] = [
   position: relative;
   cursor: pointer;
   user-select: none;
+}
+
+/* On touch screens the label, which is what takes the tap, reaches 44px around its 32px chip;
+   rows close up, so the chips sit about as close as before (12px apart, not 8px). */
+@media (pointer: coarse) {
+  .status-options {
+    row-gap: 0;
+  }
+
+  .status-option {
+    display: flex;
+    justify-content: center;
+    min-width: 44px;
+    padding-block: 6px;
+  }
 }
 
 .status-option input:focus-visible + .v-chip {

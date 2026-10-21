@@ -17,9 +17,9 @@ const ITEM_WIDTHS = [168, 120, 144]
     <div class="d-flex flex-column ga-6">
       <OrderProgress v-if="status && status !== 'cancelled'" :status="status" />
       <div v-if="showActions" class="d-flex align-center ga-2">
-        <SkeletonLine :width="168" :height="36" class="rounded-lg" />
-        <SkeletonLine :width="80" :height="36" class="rounded-lg" />
-        <SkeletonLine :width="140" :height="36" class="rounded-lg ms-auto" />
+        <SkeletonLine :width="168" :height="36" class="skeleton-button rounded-lg" />
+        <SkeletonLine :width="80" :height="36" class="skeleton-button rounded-lg" />
+        <SkeletonLine :width="140" :height="36" class="skeleton-button rounded-lg ms-auto" />
       </div>
     </div>
 

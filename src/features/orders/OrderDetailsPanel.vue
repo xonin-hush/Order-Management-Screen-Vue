@@ -196,4 +196,14 @@ dt {
 .phone:hover {
   text-decoration-color: currentColor;
 }
+
+/* Tapping to call is the point on a phone: the link reaches 44px tall, into its row's padding,
+   without making the row any taller. */
+@media (pointer: coarse) {
+  .phone {
+    display: inline-block;
+    padding-block: 12px;
+    margin-block: -12px;
+  }
+}
 </style>

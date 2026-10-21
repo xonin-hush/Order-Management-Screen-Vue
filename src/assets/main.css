@@ -80,6 +80,23 @@ body {
   }
 }
 
+/* On touch screens every button is at least 44px each way (WCAG 2.5.5), a fingertip; mouse and
+   trackpad users keep the compact sizes. Not the steppers stacked inside a number field, which
+   share its height (touch screens get side-by-side steppers instead, see OrderForm). Skeletons
+   of buttons grow with them, so nothing moves when the content arrives. */
+@media (pointer: coarse) {
+  @layer vuetify-overrides {
+    .v-btn:not(.v-number-input__control .v-btn),
+    .skeleton-button {
+      min-height: 44px;
+    }
+
+    .v-btn--icon:not(.v-number-input__control .v-btn) {
+      min-width: 44px;
+    }
+  }
+}
+
 /* Programmatic focus targets (headings, panels, banners) aren't controls, so no ring. */
 [tabindex='-1']:focus {
   outline: none;

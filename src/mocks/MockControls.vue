@@ -167,6 +167,17 @@ async function resetData() {
   }
 }
 
+/* Touch screens' 44px buttons make the footer, and this button, 8px taller. */
+@media (max-width: 767.98px) and (pointer: coarse) {
+  :global(body:has(.side-panel.v-overlay--active .side-panel__footer) .mock-controls) {
+    bottom: 92px;
+  }
+
+  :global(body .side-panel__scroll) {
+    padding-bottom: 80px;
+  }
+}
+
 .mock-controls__panel {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useMediaQuery } from '@vueuse/core'
 import type { VAlert, VBtn } from 'vuetify/components'
 import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 import { errorMessage, isApiError, isCancellation } from '@/api/errors'
@@ -29,6 +29,8 @@ const { form, items, total, isDirty, submit, setServerErrors } = useOrderForm(pr
 })
 
 const isEdit = computed(() => props.order !== undefined)
+// Steppers stacked inside the field are too small to tap: touch screens get −/+ on either side.
+const touch = useMediaQuery('(pointer: coarse)')
 const saving = computed(() => creating.value || updating.value)
 const formError = ref<string | null>(null)
 const saved = ref(false)
@@ -240,7 +242,7 @@ useEventListener(window, 'beforeunload', (event) => {
                       required
                       label="Quantity"
                       :min="1"
-                      control-variant="stacked"
+                      :control-variant="touch ? 'split' : 'stacked'"
                     />
                   </form.Field>
                   <form.Field v-slot="{ field }" :name="`items[${index}].unitPrice`">
@@ -302,6 +304,13 @@ useEventListener(window, 'beforeunload', (event) => {
   /* Not stretched: an error under one field would make the other one taller. */
   align-items: start;
   gap: 12px;
+}
+
+/* Touch screens' quantity has −/+ on either side, which leave 8rem room for barely two digits. */
+@media (pointer: coarse) {
+  .item-numbers {
+    grid-template-columns: 10rem 1fr;
+  }
 }
 
 /* Below 360px (small phones, 400% zoom) side by side cut off "Unit price (IQD)" and the price. */

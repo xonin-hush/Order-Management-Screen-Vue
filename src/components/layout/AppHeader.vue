@@ -45,7 +45,7 @@ async function signOut() {
     <v-container max-width="1280" class="d-flex align-center ga-2 ga-sm-6 px-4 px-sm-6 px-lg-8">
       <RouterLink
         :to="{ name: 'orders' }"
-        class="d-flex align-center ga-2 rounded text-title-medium font-weight-semibold text-high-emphasis text-decoration-none"
+        class="brand-link d-flex align-center ga-2 rounded text-title-medium font-weight-semibold text-high-emphasis text-decoration-none"
       >
         <BrandMark />
         <span :class="{ 'd-sr-only': phone }">OrderDesk</span>
@@ -109,6 +109,15 @@ async function signOut() {
 </template>
 
 <style scoped>
+/* On a phone the link is just the 28px mark: give touch screens a 44px target around it. */
+@media (pointer: coarse) {
+  .brand-link {
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 /* High-contrast modes drop the tint on the current page's link; mark it as the status filter
    marks its choice. */
 @media (forced-colors: active) {
