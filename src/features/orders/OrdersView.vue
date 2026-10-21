@@ -131,6 +131,9 @@ const showSkeleton = computed(
     (isPlaceholderData.value && (orders.value?.length === 0 || retryingLoad.value)),
 )
 
+/** The previous results are on screen, standing in for the new filters' ones until they arrive. */
+const awaitingResults = computed(() => isPlaceholderData.value && !showSkeleton.value)
+
 /**
  * The line above the results, announced to screen readers: their count, or, while the previous
  * results stand in for new filters' ones, which orders are on their way. (The skeleton says it
@@ -138,7 +141,7 @@ const showSkeleton = computed(
  */
 const resultsSummary = computed(() => {
   if (!orders.value || showSkeleton.value) return ''
-  if (isPlaceholderData.value) {
+  if (awaitingResults.value) {
     const { q, status: selected } = filters.value
     const which = selected ? `${STATUS_LABELS[selected].toLowerCase()} orders` : 'orders'
     return `Loading ${which}${q ? ` matching “${q}”` : ''}…`
@@ -213,12 +216,20 @@ function returnFocus() {
       <StatusFilter v-model="status" />
     </div>
 
-    <p
+    <!-- Not a <p>: Vuetify's spinner is a block element. -->
+    <div
       role="status"
-      class="results-summary mt-4 text-body-medium text-medium-emphasis text-truncate"
+      class="results-summary mt-4 d-flex align-center ga-2 text-body-medium text-medium-emphasis"
     >
-      {{ resultsSummary }}
-    </p>
+      <v-progress-circular
+        v-if="awaitingResults"
+        indeterminate
+        size="14"
+        width="2"
+        aria-hidden="true"
+      />
+      <span class="min-w-0 text-truncate">{{ resultsSummary }}</span>
+    </div>
 
     <div class="mt-2">
       <OrdersSkeleton v-if="showSkeleton" :compact="!isWide" :show-amounts="showAmounts" />
@@ -336,14 +347,18 @@ function returnFocus() {
   min-height: 1.25rem;
 }
 
-.results {
-  transition: opacity 200ms;
+/* Rows that no longer match the filters recede after a beat (a fast reply shouldn't make them
+   blink) and lose their colour, so their statuses don't contradict the filter just picked. Only
+   the rows: the headings and the bar along their top stay sharp. */
+.results :deep(:is(tbody, ul)) {
+  transition:
+    opacity 200ms,
+    filter 200ms;
 }
 
-/* Results that no longer match the filters fade back, after a beat, so a fast reply doesn't
-   make the list blink. */
-.results--updating {
-  opacity: 0.6;
+.results--updating :deep(:is(tbody, ul)) {
+  opacity: 0.5;
+  filter: grayscale(1);
   transition-delay: 150ms;
 }
 </style>
