@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, useId } from 'vue'
 import { useRoute } from 'vue-router'
-import { mdiCancel, mdiLockOutline, mdiPencilOutline } from '@mdi/js'
+import {
+  mdiCancel,
+  mdiCogOutline,
+  mdiLockOutline,
+  mdiPackageVariantClosedCheck,
+  mdiPencilOutline,
+  mdiTruckDeliveryOutline,
+} from '@mdi/js'
 import { confirmAction } from '@/components/ui/confirm'
 import { useSessionStore } from '@/features/auth/session.store'
 import { notifyError, notifySuccess } from '@/lib/notify'
@@ -11,6 +18,13 @@ import { useCancelOrder, useChangeOrderStatus } from '../queries'
 import type { Order, OrderStatus } from '../types'
 
 const props = defineProps<{ order: Order }>()
+
+/** What each step means for the parcel, on the button that moves an order there. */
+const STATUS_ICONS: Partial<Record<OrderStatus, string>> = {
+  processing: mdiCogOutline,
+  shipped: mdiTruckDeliveryOutline,
+  delivered: mdiPackageVariantClosedCheck,
+}
 
 const route = useRoute()
 const session = useSessionStore()
@@ -99,7 +113,21 @@ async function confirmCancel(event: MouseEvent) {
 
 <template>
   <section v-if="hasActions" aria-label="Order actions" class="d-flex flex-column ga-3">
+    <!-- The next step leads; cancelling sits apart from it, at the far end. -->
     <div v-if="canEdit || advanceTo.length || canCancel" class="d-flex flex-wrap align-center ga-2">
+      <!-- Keyed by position, so the same button (and its focus) carries on to the next step. -->
+      <v-btn
+        v-for="(status, index) in advanceTo"
+        :key="index"
+        variant="flat"
+        color="primary"
+        :prepend-icon="STATUS_ICONS[status]"
+        :loading="changingStatus && statusChange?.status === status"
+        :disabled="busy && !changingStatus"
+        @click="advance(status, $event)"
+      >
+        Mark as {{ STATUS_LABELS[status].toLowerCase() }}
+      </v-btn>
       <!-- Final orders: still focusable and announced with the reason (aria-disabled), but
            inert: no link to follow, and clicks are ignored. -->
       <v-btn
@@ -116,24 +144,13 @@ async function confirmCancel(event: MouseEvent) {
       >
         Edit
       </v-btn>
-      <!-- Keyed by position, so the same button (and its focus) carries on to the next step. -->
-      <v-btn
-        v-for="(status, index) in advanceTo"
-        :key="index"
-        variant="flat"
-        color="primary"
-        :loading="changingStatus && statusChange?.status === status"
-        :disabled="busy && !changingStatus"
-        @click="advance(status, $event)"
-      >
-        Mark as {{ STATUS_LABELS[status].toLowerCase() }}
-      </v-btn>
       <v-btn
         v-if="canCancel"
         color="error"
         :prepend-icon="mdiCancel"
         :aria-disabled="final || undefined"
         :aria-describedby="final ? finalNoteId : undefined"
+        class="ms-auto"
         :class="{ unavailable: final }"
         :loading="cancelling"
         :disabled="busy && !cancelling"

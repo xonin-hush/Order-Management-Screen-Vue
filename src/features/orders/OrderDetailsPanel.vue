@@ -9,7 +9,9 @@ import { formatDateTime, formatMoney } from '@/lib/format'
 import { parseIraqiMobile } from '@/lib/phone'
 import OrderActions from './components/OrderActions.vue'
 import OrderLoadError from './components/OrderLoadError.vue'
+import OrderProgress from './components/OrderProgress.vue'
 import StatusBadge from './components/StatusBadge.vue'
+import { EDIT_ORDER_PERMISSIONS } from './permissions'
 import { findCachedSummary, useOrderQuery } from './queries'
 
 const props = defineProps<{ id: number }>()
@@ -45,6 +47,13 @@ const description = computed(() => {
 })
 
 const showAmounts = computed(() => session.can('orders.view_amount'))
+/** Whether OrderActions will have buttons. */
+const showActions = computed(
+  () =>
+    session.can('orders.update_status') ||
+    session.can('orders.cancel') ||
+    session.canAll(EDIT_ORDER_PERMISSIONS),
+)
 /** In international form, so the link dials from anywhere: tel:+9647701234567. */
 const phoneHref = computed(
   () => order.value && parseIraqiMobile(order.value.customer.phone)?.getURI(),
@@ -89,7 +98,10 @@ watchEffect(() => {
           :retrying="isFetching"
           @retry="refetch()"
         />
-        <OrderActions :order="order" />
+        <div v-if="order.status !== 'cancelled' || showActions" class="d-flex flex-column ga-6">
+          <OrderProgress v-if="order.status !== 'cancelled'" :status="order.status" />
+          <OrderActions :order="order" />
+        </div>
 
         <section aria-labelledby="order-customer-heading">
           <h3 id="order-customer-heading" class="section-title">Customer</h3>
