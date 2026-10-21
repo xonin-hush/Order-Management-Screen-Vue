@@ -296,6 +296,8 @@ useEventListener(window, 'beforeunload', (event) => {
 .item-numbers {
   display: grid;
   grid-template-columns: 8rem 1fr;
+  /* Not stretched: an error under one field would make the other one taller. */
+  align-items: start;
   gap: 12px;
 }
 
