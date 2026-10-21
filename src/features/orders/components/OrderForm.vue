@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useEventListener } from '@vueuse/core'
 import type { VAlert, VBtn } from 'vuetify/components'
-import { mdiAlertOutline, mdiPlus, mdiTrashCanOutline } from '@mdi/js'
+import { mdiPlus, mdiTrashCanOutline } from '@mdi/js'
 import { errorMessage, isApiError, isCancellation } from '@/api/errors'
 import { confirmAction } from '@/components/ui/confirm'
 import { bindField, fieldError } from '@/lib/form-field'
@@ -150,14 +150,7 @@ useEventListener(window, 'beforeunload', (event) => {
     @submit.prevent="onSubmit"
   >
     <div class="side-panel__scroll d-flex flex-column ga-8">
-      <v-alert
-        v-if="formError"
-        ref="formErrorAlert"
-        type="error"
-        :icon="mdiAlertOutline"
-        tabindex="-1"
-        class="flex-0-0"
-      >
+      <v-alert v-if="formError" ref="formErrorAlert" type="error" tabindex="-1" class="flex-0-0">
         {{ formError }}
       </v-alert>
 

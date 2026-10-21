@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiAlertOutline, mdiRefresh } from '@mdi/js'
+import { mdiAlertCircleOutline, mdiRefresh } from '@mdi/js'
 import EmptyState from './EmptyState.vue'
 
 withDefaults(
@@ -20,7 +20,7 @@ defineEmits<{ retry: [] }>()
 </script>
 
 <template>
-  <v-alert v-if="compact" type="error" :icon="mdiAlertOutline">
+  <v-alert v-if="compact" type="error">
     <span class="font-weight-medium">{{ title }}</span>
     {{ description }}
     <template v-if="retryable" #append>
@@ -34,7 +34,7 @@ defineEmits<{ retry: [] }>()
     v-else
     role="alert"
     tone="error"
-    :icon="mdiAlertOutline"
+    :icon="mdiAlertCircleOutline"
     :as="as"
     :title="title"
     :description="description"

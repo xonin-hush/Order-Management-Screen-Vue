@@ -1,5 +1,22 @@
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+import {
+  mdiAlertCircleOutline,
+  mdiAlertOutline,
+  mdiCheckCircleOutline,
+  mdiInformationOutline,
+} from '@mdi/js'
+
+/**
+ * Alerts take their icon from their type. Vuetify's are filled; the app's icons are outlined,
+ * and the same ones as its toasts and error states (src/lib/notify.ts, ErrorState.vue).
+ */
+const statusIcons = {
+  success: mdiCheckCircleOutline,
+  info: mdiInformationOutline,
+  warning: mdiAlertOutline,
+  error: mdiAlertCircleOutline,
+}
 
 /** One look for every form control. */
 const field = {
@@ -16,7 +33,7 @@ const field = {
  */
 export function createAppVuetify() {
   return createVuetify({
-    icons: { defaultSet: 'mdi', aliases, sets: { mdi } },
+    icons: { defaultSet: 'mdi', aliases: { ...aliases, ...statusIcons }, sets: { mdi } },
     theme: {
       // Vuetify 4 follows the OS by default; the app is designed and checked in light only.
       defaultTheme: 'light',
