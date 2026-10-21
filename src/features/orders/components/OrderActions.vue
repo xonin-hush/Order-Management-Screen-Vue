@@ -113,7 +113,8 @@ async function confirmCancel(event: MouseEvent) {
 
 <template>
   <section v-if="hasActions" aria-label="Order actions" class="d-flex flex-column ga-3">
-    <!-- The next step leads; cancelling sits apart from it, at the far end. -->
+    <!-- The next step leads; cancelling sits apart from it, at the far end (on phones, where the
+         row wraps, it simply starts the next line). -->
     <div v-if="canEdit || advanceTo.length || canCancel" class="d-flex flex-wrap align-center ga-2">
       <!-- Keyed by position, so the same button (and its focus) carries on to the next step. -->
       <v-btn
@@ -150,7 +151,7 @@ async function confirmCancel(event: MouseEvent) {
         :prepend-icon="mdiCancel"
         :aria-disabled="final || undefined"
         :aria-describedby="final ? finalNoteId : undefined"
-        class="ms-auto"
+        class="ms-sm-auto"
         :class="{ unavailable: final }"
         :loading="cancelling"
         :disabled="busy && !cancelling"
