@@ -14,11 +14,14 @@ withDefaults(defineProps<{ width?: string | number; height?: string | number }>(
 </template>
 
 <style scoped>
-/* Vuetify paints the loader white behind the bone; on a tinted row that would show. */
-.skeleton-line {
-  flex-shrink: 0;
-  max-width: 100%;
-  border-radius: 6px;
-  background: transparent;
+/* In Vuetify's overrides layer, so `rounded-*` utilities still reshape a bar into a button or a
+   chip. Vuetify paints the loader white behind the bone; on a tinted row that would show. */
+@layer vuetify-overrides {
+  .skeleton-line {
+    flex-shrink: 0;
+    max-width: 100%;
+    border-radius: 6px;
+    background: transparent;
+  }
 }
 </style>
