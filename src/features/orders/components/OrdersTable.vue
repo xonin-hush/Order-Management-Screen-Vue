@@ -95,9 +95,19 @@ function openFromRow(event: MouseEvent, order: OrderSummary) {
   max-width: 0;
 }
 
-/* Vuetify's row hover covers data cells only; the order number is a row header. */
-tbody tr:hover > th {
+/* Vuetify's row hover lays a tint over each data cell (td::after), with no transition. The order
+   number is a row header, so it gets the very same overlay: tinting its background instead faded
+   it in over Vuetify's 0.28s cell transition, behind the rest of the row. */
+tbody > tr > th {
+  position: relative;
+}
+
+tbody > tr:hover > th::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: rgba(var(--v-border-color), var(--v-hover-opacity));
+  pointer-events: none;
 }
 
 .order-link {
