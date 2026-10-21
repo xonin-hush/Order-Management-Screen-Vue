@@ -111,8 +111,11 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
   the new filter, with a bar along their top (not in the search box) and "Loading shipped orders…"
   above them. A page or panel still downloading puts a bar under the app bar. Buttons spin while
   their action saves.
-- **Accessibility:** a table from tablet width up and a list on phones. Everything works by keyboard, and focus
-  returns to the order's row when a panel closes.
+- **Accessibility:** a table from tablet width up and a list on phones. Everything works by
+  keyboard, and focus returns to the order's row when a panel closes. Required fields say so, on
+  screen and to screen readers. Touch screens get controls at least 44 px each way, and Windows
+  high-contrast mode keeps the chosen filter, current page and order progress visible. An axe-core
+  audit (WCAG 2.2 AA) of every screen at 320 px to desktop, landscape included, found no violations.
 - **Mock data:** 50 deterministic orders kept in `localStorage`, so changes survive a reload.
 
 ## What I'd improve next
@@ -120,7 +123,8 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
 - Server-side pagination and sorting.
 - Optimistic status updates with rollback.
 - A CI pipeline (GitHub Actions) running lint, type-check, tests and build on every push.
-- Playwright end-to-end tests in CI, for real focus and dialog behaviour across browsers.
+- Playwright end-to-end tests in CI, for real focus and dialog behaviour across browsers, with
+  axe-core checks on every screen.
 - Arabic with right-to-left layout (the CSS already uses logical properties).
 - Cookie-based auth with expiring tokens and silent refresh.
 - Iraq-only metadata for libphonenumber-js, to shrink its ~34 KB (gzipped) chunk to a few KB.
