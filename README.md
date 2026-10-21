@@ -4,6 +4,9 @@ An order-management screen in **Vue 3 (Composition API) and TypeScript**, built 
 It runs in the browser against a mock API built with `axios-mock-adapter`, which enforces the same
 permission rules as the UI, adds 300–1000 ms of latency to every response, and can be told to fail.
 
+**Live demo: [orders.xonin.dev](https://orders.xonin.dev)**. There is no server: the mock API runs in
+your browser, and your changes are kept in that browser only.
+
 ![Orders list](docs/orders-list.png)
 
 | Order details (admin) | Phone (support, no amounts) |
