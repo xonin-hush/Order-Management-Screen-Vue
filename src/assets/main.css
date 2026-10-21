@@ -64,9 +64,11 @@ body {
   outline: none;
 }
 
-/* Vuetify's placeholders are 2.3:1; the search field has no other visible label. 0.7 → 5.9:1. */
-.v-field input::placeholder,
-.v-field textarea::placeholder {
+/* Vuetify's placeholders are 2.3:1; the search field has no other visible label. 0.7 → 5.9:1.
+   Only where Vuetify shows them at all: with the label resting inside the field, it hides the
+   placeholder, and an unlayered rule here would otherwise print the two on top of each other. */
+.v-field:is(.v-field--active, .v-field--no-label) input::placeholder,
+.v-field:is(.v-field--active, .v-field--no-label) textarea::placeholder {
   opacity: var(--v-medium-emphasis-opacity);
 }
 
