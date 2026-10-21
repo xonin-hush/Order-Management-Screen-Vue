@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue'
+import { computed, useId, useTemplateRef } from 'vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import type { VSelect } from 'vuetify/components'
 import { mdiFlaskOutline } from '@mdi/js'
@@ -19,6 +19,8 @@ const mode = computed({
   set: (value: FailureMode) => armFailure(value),
 })
 const selected = computed(() => FAILURE_MODES.find((option) => option.value === failure.mode)!)
+const armed = computed(() => failure.mode !== 'off')
+const descriptionId = useId()
 
 // Vuetify 4.3 leaves focus on <body> after an option is picked with the keyboard (the list is
 // removed with focus inside it); put it back on the select, where the user was.
@@ -54,7 +56,7 @@ async function resetData() {
           :prepend-icon="mdiFlaskOutline"
         >
           Mock API
-          <v-chip v-if="failure.mode !== 'off'" color="warning" class="ms-2">Failure armed</v-chip>
+          <v-chip v-if="armed" color="warning" class="ms-2">Failure armed</v-chip>
         </v-btn>
       </template>
 
@@ -65,17 +67,26 @@ async function resetData() {
         elevation="4"
         class="mock-controls__panel pa-4 d-flex flex-column ga-5"
       >
-        <v-select
-          ref="select"
-          v-model="mode"
-          label="Simulate a failure"
-          :items="FAILURE_MODES"
-          item-title="label"
-          item-value="value"
-          :hint="`${selected.description}${failure.mode === 'off' ? '' : ' Then it switches itself off. Sign-in is never affected.'}`"
-          persistent-hint
-          :menu-props="{ onAfterLeave: keepFocus }"
-        />
+        <!-- What the failure does goes under the select as text of its own: as the field's hint,
+             three lines were squeezed onto Vuetify's 12px message line and clipped. -->
+        <div>
+          <v-select
+            ref="select"
+            v-model="mode"
+            label="Simulate a failure"
+            :items="FAILURE_MODES"
+            item-title="label"
+            item-value="value"
+            :aria-describedby="descriptionId"
+            :menu-props="{ onAfterLeave: keepFocus }"
+          />
+          <v-alert v-if="armed" :id="descriptionId" type="warning" class="mt-3 text-body-small">
+            {{ selected.description }} Then it switches itself off. Sign-in is never affected.
+          </v-alert>
+          <p v-else :id="descriptionId" class="mt-2 text-body-small text-medium-emphasis">
+            {{ selected.description }}
+          </p>
+        </div>
 
         <div v-if="session.user">
           <p class="text-body-medium font-weight-medium">Permissions from GET /me</p>
