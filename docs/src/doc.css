@@ -1,0 +1,212 @@
+/*
+ * Shared print styles for the PDFs in docs/. A4, Inter (from the app's own dependency) and the
+ * app's zinc palette, so the documents look like the product they describe.
+ */
+@font-face {
+  font-family: 'Inter Doc';
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
+    format('woff2-variations');
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: 'Inter Doc';
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2')
+    format('woff2-variations');
+  font-weight: 100 900;
+  unicode-range: U+0100-024F, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  --ink: #18181b;
+  --text: #27272a;
+  --muted: #52525b;
+  --faint: #71717a;
+  --ghost: #a1a1aa;
+  --hair: #e4e4e7;
+  --hair-strong: #d4d4d8;
+  --tint: #f4f4f5;
+  --green: #047857;
+  --green-tint: #ecfdf5;
+  --green-line: #a7f3d0;
+}
+
+@page {
+  size: A4;
+  margin: 17mm 16mm 16mm;
+
+  /* Each document names itself in a @bottom-left box of its own. */
+  @bottom-left {
+    font:
+      7.5pt 'Inter Doc',
+      sans-serif;
+    color: #52525b;
+    vertical-align: top;
+    padding-top: 4mm;
+  }
+
+  @bottom-right {
+    content: counter(page) ' / ' counter(pages);
+    font:
+      7.5pt 'Inter Doc',
+      sans-serif;
+    color: #52525b;
+    vertical-align: top;
+    padding-top: 4mm;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+html {
+  font-family: 'Inter Doc', ui-sans-serif, system-ui, sans-serif;
+  font-size: 10pt;
+  line-height: 1.5;
+  color: var(--text);
+  font-feature-settings: 'cv11';
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1 {
+  margin-top: 4pt;
+  font-size: 27pt;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+h2 {
+  margin-bottom: 8pt;
+  font-size: 14pt;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h3,
+.label {
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.eyebrow {
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.lead {
+  margin-top: 8pt;
+  max-width: 142mm;
+  font-size: 12pt;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.page {
+  break-before: page;
+}
+
+section + section {
+  margin-top: 16pt;
+}
+
+b,
+strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+code {
+  padding: 0.5pt 3pt;
+  border-radius: 3pt;
+  background: var(--tint);
+  font-family: Menlo, ui-monospace, monospace;
+  font-size: 0.86em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tables: a hairline under each row, headings as small capitals. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 5pt 6pt 5pt 0;
+  border-bottom: 1px solid var(--hair);
+  text-align: start;
+  vertical-align: top;
+}
+
+thead th {
+  padding-block: 3pt 4pt;
+  border-bottom-color: var(--hair-strong);
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+tr {
+  break-inside: avoid;
+}
+
+.num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A screenshot of the app, framed like a window. */
+.shot img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--hair-strong);
+  border-radius: 5pt;
+}
+
+.shot figcaption {
+  margin-top: 4pt;
+  font-size: 8pt;
+  color: var(--muted);
+}

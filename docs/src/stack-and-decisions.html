@@ -1,0 +1,454 @@
+<!doctype html>
+<!--
+  Source of docs/stack-and-decisions.pdf. Print it with Chrome, from the repo root:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --no-pdf-header-footer \
+    --print-to-pdf=docs/stack-and-decisions.pdf docs/src/stack-and-decisions.html
+  Versions are the installed minors; check them against package-lock.json when they move.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OrderDesk · Stack and decisions</title>
+    <link rel="stylesheet" href="doc.css" />
+    <style>
+      @page {
+        @bottom-left {
+          content: 'OrderDesk · Stack and decisions';
+        }
+      }
+
+      .lead {
+        max-width: 150mm;
+      }
+
+      h2 {
+        margin-top: 14pt;
+        margin-bottom: 7pt;
+      }
+
+      /* How a request travels: five boxes and the arrows between them. */
+      .flow {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+        align-items: stretch;
+        gap: 0 6pt;
+      }
+
+      .box {
+        padding: 6pt 8pt 7pt;
+        border: 1px solid var(--hair-strong);
+        border-radius: 5pt;
+      }
+
+      .box b {
+        display: block;
+        font-size: 9pt;
+      }
+
+      .box span {
+        display: block;
+        margin-top: 2pt;
+        font-size: 7.5pt;
+        line-height: 1.4;
+        color: var(--muted);
+      }
+
+      .box.mock {
+        border-style: dashed;
+        background: var(--tint);
+      }
+
+      .arrow {
+        align-self: center;
+        font-size: 9pt;
+        color: var(--ghost);
+      }
+
+      .session {
+        display: grid;
+        grid-template-columns: 0.53fr 1fr;
+        align-items: center;
+        gap: 10pt;
+        margin-top: 7pt;
+      }
+
+      .session p {
+        font-size: 8.5pt;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .stack-table td {
+        padding-block: 4.5pt 5pt;
+        font-size: 8.6pt;
+        line-height: 1.42;
+      }
+
+      .stack-table td:first-child {
+        width: 11%;
+        padding-top: 6pt;
+        font-size: 7.5pt;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+
+      .stack-table td:nth-child(2) {
+        width: 18%;
+      }
+
+      .stack-table td:nth-child(2) b {
+        display: block;
+        font-size: 9.25pt;
+        white-space: nowrap;
+      }
+
+      .stack-table td:nth-child(2) span {
+        display: block;
+        font-size: 7.5pt;
+        color: var(--muted);
+      }
+
+      .stack-table td:last-child {
+        width: 22%;
+        padding-inline-end: 0;
+        font-size: 8.2pt;
+        color: var(--muted);
+      }
+
+      .aside {
+        margin-top: 8pt;
+        font-size: 8.5pt;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .aside b {
+        color: var(--ink);
+      }
+
+      .decisions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8pt;
+      }
+
+      .decision {
+        padding: 8pt 10pt 9pt;
+        border: 1px solid var(--hair-strong);
+        border-radius: 6pt;
+        break-inside: avoid;
+      }
+
+      .decision h4 {
+        margin: 0 0 4pt;
+        font-size: 10pt;
+        font-weight: 650;
+        color: var(--ink);
+      }
+
+      .decision h4 small {
+        margin-inline-end: 5pt;
+        font-size: 7.5pt;
+        font-weight: 600;
+        color: var(--faint);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .decision p {
+        font-size: 8.3pt;
+        line-height: 1.45;
+        color: var(--text);
+      }
+
+      .tradeoffs td {
+        padding-block: 3.5pt;
+        font-size: 8.3pt;
+        line-height: 1.42;
+      }
+
+      .tradeoffs td:first-child {
+        width: 30%;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .more {
+        margin-top: 10pt;
+        padding-top: 8pt;
+        border-top: 1px solid var(--hair);
+        font-size: 8.5pt;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1 · The stack -->
+    <section>
+      <p class="eyebrow">Senior frontend take-home · Stack and decisions</p>
+      <h1>OrderDesk</h1>
+      <p class="lead">
+        The brief fixed Vue 3, the Composition API, TypeScript and axios-mock-adapter. Every other
+        library replaces code I would otherwise write and test myself; anything the brief didn’t
+        need was left out.
+      </p>
+
+      <h2>How a request travels</h2>
+      <div class="flow">
+        <div class="box"><b>Components</b><span>Vuetify, TanStack Form</span></div>
+        <span class="arrow">→</span>
+        <div class="box">
+          <b>queries.ts</b><span>TanStack Query: cache, retries, invalidation</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="box"><b>api.ts</b><span>Typed functions per endpoint</span></div>
+        <span class="arrow">→</span>
+        <div class="box">
+          <b>http.ts</b><span>axios: token, stale-session guard, ApiError</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="box mock">
+          <b>Mock API</b><span>axios-mock-adapter, zod, data in localStorage</span>
+        </div>
+      </div>
+      <div class="session">
+        <div class="box">
+          <b>Session store (Pinia)</b
+          ><span>token · user · permissions from <code>GET /me</code></span>
+        </div>
+        <p>
+          Read by route guards, interceptors and components. Components never touch axios, and every
+          failure reaches them as one typed <code>ApiError</code>. Set
+          <code>VITE_API_BASE_URL</code> and the mock is never loaded.
+        </p>
+      </div>
+
+      <h2>The stack</h2>
+      <table class="stack-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Choice</th>
+            <th>Why</th>
+            <th>Instead of</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Scaffold</td>
+            <td><b>create-vue</b><span>Vite 8.3 · TS 6.0</span></td>
+            <td>
+              The official Vue starter, so the layout is familiar to any Vue developer. TypeScript
+              stays on 6 because vue-tsc still needs its JavaScript compiler API.
+            </td>
+            <td>Nuxt: no SSR or SEO need in an internal tool</td>
+          </tr>
+          <tr>
+            <td>UI</td>
+            <td><b>Vuetify</b><span>4.3</span></td>
+            <td>
+              Accessible fields, dialogs with focus trap and scroll lock, tables, snackbars,
+              skeletons and progress bars. Its theme and global defaults hold every shared style in
+              one file.
+            </td>
+            <td>Tailwind and a headless kit: every field, table and toast built by hand</td>
+          </tr>
+          <tr>
+            <td>Forms</td>
+            <td><b>TanStack Form</b><span>1.33</span></td>
+            <td>
+              Typed nested fields for line items, validation on submit and then as you type, and a
+              slot for each field’s 422 error.
+            </td>
+            <td>VeeValidate: equally capable; TanStack matches the Query model</td>
+          </tr>
+          <tr>
+            <td>Server state</td>
+            <td><b>TanStack Query</b><span>Vue 5.104</span></td>
+            <td>
+              One cache entry per filter, so a slow older search can’t overwrite a newer one. Also
+              cancellation, refetch after writes, and one <code>clear()</code> on sign-out.
+            </td>
+            <td>Loading flags and caching written by hand in Pinia</td>
+          </tr>
+          <tr>
+            <td>Session</td>
+            <td><b>Pinia</b><span>4.1 · one store</span></td>
+            <td>
+              Token, user and permissions. Router guards and interceptors read it as well as
+              components, and each test gets a fresh one.
+            </td>
+            <td>A module-level reactive object: shared between tests, no devtools</td>
+          </tr>
+          <tr>
+            <td>HTTP</td>
+            <td><b>axios</b><span>1.20</span></td>
+            <td>
+              The brief’s mock adapter plugs into it. Interceptors attach the token, drop responses
+              from an ended session and turn every failure into one typed <code>ApiError</code>.
+            </td>
+            <td>fetch: the brief’s mock adapter needs axios</td>
+          </tr>
+          <tr>
+            <td>Validation</td>
+            <td><b>zod</b><span>4.6</span></td>
+            <td>
+              One schema for the form and the mock, so the API’s 422 paths
+              (<code>items.1.quantity</code>) are the form’s field names.
+            </td>
+            <td>Separate client and server rules that drift apart</td>
+          </tr>
+          <tr>
+            <td>Phone numbers</td>
+            <td><b>libphonenumber-js</b><span>1.13</span></td>
+            <td>
+              Knows which Iraqi numbers are mobiles, in any notation, and stores one format. Loaded
+              only with the order panels.
+            </td>
+            <td>A hand-written regex</td>
+          </tr>
+          <tr>
+            <td>Tests</td>
+            <td><b>Vitest</b><span>4.1 · Testing Library</span></td>
+            <td>
+              UI tests render the whole app, wired as in production, against the mock with no delay,
+              and act like a user. Contract tests call the mock API directly.
+            </td>
+            <td>Shallow component tests that miss the wiring</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="aside">
+        <b>Also used:</b> path-to-regexp for the mock’s route patterns (<code>/orders/:id</code>),
+        VueUse for event listeners that clean up after themselves, and MDI icons imported one by one
+        as SVG paths.
+      </p>
+    </section>
+
+    <!-- 2 · Decisions -->
+    <section class="page">
+      <h2 style="margin-top: 0">Decisions that shape the code</h2>
+      <div class="decisions">
+        <div class="decision">
+          <h4><small>01</small>Permissions, never roles</h4>
+          <p>
+            Code asks <code>session.can('orders.cancel')</code>. Roles exist only on the server, so
+            a new role needs no client change. With no permission, an action is <b>hidden</b>: it
+            never applies to this user. Allowed but blocked by the order’s state, it is
+            <b>disabled with the reason</b> on screen.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>02</small>The server has the final say</h4>
+          <p>
+            The mock re-checks every rule in a fixed order: 401 → 403 → 404 → 409 → 422. Responses
+            are built field by field from an allow-list, so a new field never reaches Support by
+            accident. A 403 is about the user, so <code>/me</code> is re-read; a 409 is about the
+            order, so the order is refetched.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>03</small>A session ends one way</h4>
+          <p>
+            Sign-out and a 401 share <code>endSession()</code>: forget the token, go to sign-in,
+            clear the query cache and pending saves, reset the store, revoke the token. Responses
+            sent with an old token are discarded, so nothing reaches the next user. A 403 never
+            signs anyone out.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>04</small>The URL is the state</h4>
+          <p>
+            Filters and the open panel live in the URL (<code>/orders/12?status=pending</code>), so
+            refresh, Back and shared links work. Search waits for a 300 ms pause, and the list
+            always matches the search box.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>05</small>One form, one schema</h4>
+          <p>
+            Create and edit share one form and the zod schema the mock validates with. 422 errors
+            appear under their fields and stay with their line item when another is removed. Edit
+            works on a copy, so a background refresh never overwrites typing.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>06</small>Failure is part of the demo</h4>
+          <p>
+            The Mock API panel makes the next order request fail with a 500, network error, 401, 403
+            or 422, then switches itself off, so a reviewer sees the error and then the recovery. It
+            works over an open order panel too. Loads retry once, saves never.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>07</small>Loaders sit on what's loading</h4>
+          <p>
+            Skeletons have the shape of the table, list, panel and form they stand in for, so
+            nothing moves when data arrives. A search or filter puts a bar on the results, not in
+            the search box; a page still downloading puts one under the app bar.
+          </p>
+        </div>
+        <div class="decision">
+          <h4><small>08</small>One look in dev and production</h4>
+          <p>
+            Vuetify ranks its CSS in cascade layers, ordered by first appearance, and the build
+            links component CSS before the file that declares them. <code>index.html</code> declares
+            the order first; without it, built buttons drew 16 px text where dev showed 14 px.
+          </p>
+        </div>
+      </div>
+
+      <h2>Trade-offs I accepted</h2>
+      <table class="tradeoffs">
+        <tbody>
+          <tr>
+            <td>Token in <code>localStorage</code></td>
+            <td>
+              The mock runs in the browser. In production the token becomes an httpOnly cookie, a
+              change confined to <code>http.ts</code> and the auth feature.
+            </td>
+          </tr>
+          <tr>
+            <td>409, not 403, for final orders</td>
+            <td>
+              Changing a delivered or cancelled order fails even for Admin. The block comes from the
+              order’s state, not the user’s rights.
+            </td>
+          </tr>
+          <tr>
+            <td>One rule beyond the brief</td>
+            <td>
+              Creating or editing also needs <code>orders.view_amount</code>: orders carry prices,
+              and a role that can’t see them shouldn’t overwrite them.
+            </td>
+          </tr>
+          <tr>
+            <td>No pagination</td>
+            <td>
+              Fifty orders fit in one response. Server-side pagination and sorting are the first
+              next step.
+            </td>
+          </tr>
+          <tr>
+            <td>~34 KB gzipped for phone numbers</td>
+            <td>
+              libphonenumber-js loads only with the order panels. Iraq-only metadata would cut it to
+              a few KB.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="aside">
+        <b>Deliberately not added:</b> a date library (<code>Intl</code> formats IQD and dates), an
+        i18n library, stores for UI state (the URL holds it), and CI with Playwright end-to-end
+        tests, which the README lists as next steps.
+      </p>
+      <p class="more">
+        More detail: <b>README.md</b> (setup, test users, permission model, connecting a real
+        backend) and <b>docs/project-report.pdf</b> (each requirement in the brief, with the passing
+        tests that prove it).
+      </p>
+    </section>
+  </body>
+</html>

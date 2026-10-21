@@ -1,0 +1,1043 @@
+<!doctype html>
+<!--
+  Source of docs/project-report.pdf. Print it with Chrome, from the repo root:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --no-pdf-header-footer \
+    --print-to-pdf=docs/project-report.pdf docs/src/project-report.html
+  The numbers are a snapshot: update them from `npm test` and the other quality gates first.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OrderDesk · Project report</title>
+    <link rel="stylesheet" href="doc.css" />
+    <style>
+      @page {
+        @bottom-left {
+          content: 'OrderDesk · Project report';
+        }
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 9pt;
+        margin-top: 18pt;
+      }
+
+      .stat {
+        padding: 11pt 12pt 12pt;
+        border: 1px solid var(--hair-strong);
+        border-radius: 6pt;
+      }
+
+      .stat b {
+        display: block;
+        font-size: 19pt;
+        font-weight: 650;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat b.ok {
+        color: var(--green);
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 3pt;
+        font-size: 8.5pt;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .shots {
+        display: grid;
+        grid-template-columns: 1fr 0.25fr;
+        align-items: start;
+        gap: 12pt;
+        margin-top: 18pt;
+      }
+
+      .gates {
+        margin-top: 18pt;
+      }
+
+      .gates h3 {
+        margin-bottom: 4pt;
+      }
+
+      .gates td {
+        padding-block: 6pt;
+        font-size: 10.5pt;
+        vertical-align: middle;
+      }
+
+      .gates td:first-child {
+        width: 36%;
+        color: var(--ink);
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 1pt 7pt 1.5pt;
+        border: 1px solid var(--green-line);
+        border-radius: 999px;
+        background: var(--green-tint);
+        font-size: 8pt;
+        font-weight: 600;
+        color: var(--green);
+      }
+
+      .columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22pt;
+      }
+
+      .columns + .columns {
+        margin-top: 20pt;
+      }
+
+      .bullets li {
+        position: relative;
+        padding-inline-start: 11pt;
+        font-size: 10pt;
+      }
+
+      .bullets li + li {
+        margin-top: 5pt;
+      }
+
+      .bullets li::before {
+        content: '';
+        position: absolute;
+        top: 0.62em;
+        inset-inline-start: 1pt;
+        width: 3.5pt;
+        height: 3.5pt;
+        border-radius: 50%;
+        background: var(--ghost);
+      }
+
+      h3 + .bullets,
+      h3 + table,
+      h3 + .shot {
+        margin-top: 6pt;
+      }
+
+      .roles {
+        grid-template-columns: 0.8fr 1.2fr;
+      }
+
+      .roles td {
+        padding-block: 4pt;
+        font-size: 9pt;
+      }
+
+      .roles td:not(:first-child),
+      .roles th:not(:first-child) {
+        width: 15%;
+        text-align: center;
+      }
+
+      .yes,
+      .no {
+        display: inline-block;
+        width: 9pt;
+        height: 9pt;
+        vertical-align: -1pt;
+      }
+
+      .yes {
+        background: var(--check) center / contain no-repeat;
+      }
+
+      .no {
+        height: 1px;
+        vertical-align: 3pt;
+        background: var(--hair-strong);
+      }
+
+      /* A green check, drawn as an image: masks print with a faint box around them. */
+      :root {
+        --check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23047857'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E");
+      }
+
+      .intro {
+        margin-bottom: 10pt;
+      }
+
+      /* Headings once, not again on each page the table continues on. */
+      .evidence-table thead {
+        display: table-row-group;
+      }
+
+      .evidence-table th:first-child {
+        width: 29%;
+      }
+
+      .evidence-table tbody th {
+        padding-top: 4.5pt;
+        padding-bottom: 4.5pt;
+        font-size: 9.75pt;
+        font-weight: 500;
+        line-height: 1.38;
+        color: var(--ink);
+      }
+
+      .evidence-table tbody td {
+        padding-top: 5pt;
+        padding-bottom: 4.5pt;
+      }
+
+      .evidence-table .group th {
+        padding-top: 9pt;
+        border-bottom-color: var(--hair-strong);
+        font-size: 7.5pt;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+
+      .evidence li,
+      .note {
+        font-size: 8.4pt;
+        line-height: 1.42;
+      }
+
+      .evidence li {
+        position: relative;
+        padding-inline-start: 12pt;
+      }
+
+      .evidence li + li,
+      .note + .evidence {
+        margin-top: 2pt;
+      }
+
+      .evidence li::before {
+        content: '';
+        position: absolute;
+        top: 0.16em;
+        inset-inline-start: 0;
+        width: 9pt;
+        height: 9pt;
+        background: var(--check) center / contain no-repeat;
+      }
+
+      .file {
+        margin-inline-start: 4pt;
+        font-size: 7pt;
+        color: var(--faint);
+      }
+
+      .note {
+        color: var(--muted);
+      }
+
+      .results td {
+        font-size: 10pt;
+        vertical-align: middle;
+      }
+
+      .results td:first-child {
+        width: 26%;
+      }
+
+      .results .passed {
+        font-weight: 650;
+        color: var(--green);
+      }
+
+      .results tfoot td {
+        border-bottom: 0;
+        font-weight: 650;
+        color: var(--ink);
+      }
+
+      .results tfoot .passed {
+        color: var(--green);
+      }
+
+      .beyond {
+        margin-top: 16pt;
+      }
+
+      .reproduce {
+        display: flex;
+        gap: 8pt;
+        margin-top: 6pt;
+      }
+
+      .measured {
+        margin-top: 18pt;
+        font-size: 7.5pt;
+        color: var(--faint);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1 · Summary -->
+    <section>
+      <p class="eyebrow">Senior frontend take-home · Project report</p>
+      <h1>OrderDesk</h1>
+      <p class="lead">
+        An order-management screen in Vue 3, the Composition API and TypeScript, running against a
+        mock API built with axios-mock-adapter. This report shows what was built and the test
+        results behind each requirement in the brief.
+      </p>
+
+      <div class="stats">
+        <div class="stat"><b class="ok">72/72</b><span>tests passing</span></div>
+        <div class="stat"><b>31</b><span>brief requirements mapped</span></div>
+        <div class="stat"><b>40</b><span>tests cited as evidence</span></div>
+        <div class="stat"><b>11.5 s</b><span>full test run</span></div>
+      </div>
+
+      <div class="shots">
+        <figure class="shot">
+          <img src="../orders-list.png" alt="The orders list, signed in as a manager" />
+          <figcaption>Orders list, signed in as Manager</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="../mobile-support.png" alt="The orders list on a phone, signed in as support" />
+          <figcaption>Phone, Support: no amounts</figcaption>
+        </figure>
+      </div>
+
+      <div class="gates">
+        <h3>Quality gates</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Check</th>
+              <th>Command</th>
+              <th class="num">Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tests</td>
+              <td><code>npm test</code></td>
+              <td class="num"><span class="pill">72 passed · 0 failed</span></td>
+            </tr>
+            <tr>
+              <td>Lint</td>
+              <td><code>oxlint</code> + <code>eslint</code></td>
+              <td class="num"><span class="pill">0 problems</span></td>
+            </tr>
+            <tr>
+              <td>Formatting</td>
+              <td><code>prettier --check</code></td>
+              <td class="num"><span class="pill">clean</span></td>
+            </tr>
+            <tr>
+              <td>Type-check and build</td>
+              <td><code>npm run build</code></td>
+              <td class="num"><span class="pill">passed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2 · How it works -->
+    <section class="page">
+      <h2>How it works</h2>
+      <div class="columns">
+        <div>
+          <h3>Architecture</h3>
+          <ul class="bullets">
+            <li>
+              <b>Server state</b> lives in TanStack Vue Query, one cache entry per search, so a slow
+              older response can never replace newer results.
+            </li>
+            <li><b>The session</b> (token, user, permissions) is the only Pinia store.</li>
+            <li>
+              <b>Every request</b> goes through one axios instance whose interceptors attach the
+              token and turn failures into one typed <code>ApiError</code>.
+            </li>
+            <li>
+              <b>Forms</b> run on TanStack Form and validate with the zod schema the mock uses, so
+              422 errors land under the matching fields.
+            </li>
+            <li>
+              <b>The UI</b> is Vuetify 4. Its theme and component defaults define every shared style
+              once.
+            </li>
+            <li>
+              <b>Loaders sit on what's loading:</b> skeletons shaped like the screen they replace, a
+              bar on the results while a search or filter updates them.
+            </li>
+            <li>
+              <b>Filters and the open panel</b> live in the URL, so refresh, Back and shared links
+              work.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3>Permission model</h3>
+          <ul class="bullets">
+            <li>
+              The UI checks <b>permissions, never roles</b>:
+              <code>session.can('orders.cancel')</code>. Roles exist only on the server.
+            </li>
+            <li>
+              <b>No permission → hidden.</b> Allowed, but blocked by the order's state →
+              <b>disabled, with the reason</b> on screen.
+            </li>
+            <li>
+              The mock enforces every rule again: <b>401</b> ends the session, <b>403</b> is
+              explained and <code>/me</code> re-read, <b>409</b> for final orders, <b>422</b> per
+              field.
+            </li>
+            <li>
+              One rule beyond the brief: creating or editing also needs
+              <code>orders.view_amount</code>, since orders carry prices.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="columns roles">
+        <div>
+          <h3>Roles, as served by GET /me</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Permission</th>
+                <th>Admin</th>
+                <th>Manager</th>
+                <th>Support</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>orders.view</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+              </tr>
+              <tr>
+                <td><code>orders.view_amount</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+              <tr>
+                <td><code>orders.create</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+              <tr>
+                <td><code>orders.update</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+              <tr>
+                <td><code>orders.update_status</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+              <tr>
+                <td><code>orders.cancel</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+              <tr>
+                <td><code>admin.access</code></td>
+                <td><i class="yes"></i></td>
+                <td><i class="no"></i></td>
+                <td><i class="no"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>Details panel</h3>
+          <figure class="shot">
+            <img src="../order-details.png" alt="An order's details panel, signed in as an admin" />
+            <figcaption>Admin view: progress line, next step, edit and cancel</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3–4 · Requirements and evidence -->
+    <section class="page">
+      <h2>Requirements and evidence</h2>
+      <p class="intro">
+        Each requirement from the brief, with the passing tests that prove it. Every test cited here
+        was matched against the Vitest results of the run on the last page.
+      </p>
+      <table class="evidence-table">
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>Evidence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group">
+            <th colspan="2">Login</th>
+          </tr>
+          <tr>
+            <th>Login page with email and password</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  checks the form before calling the API, then explains wrong credentials<span
+                    class="file"
+                    >auth</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Three test users: Admin, Manager, Support</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  returns a token for valid credentials, 401 for wrong ones and 422 for missing
+                  ones<span class="file">mock-api</span>
+                </li>
+                <li>fills in a demo account in one click<span class="file">auth</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Role and permissions loaded from GET /me</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  returns the current user with their role and full permission list from /me<span
+                    class="file"
+                    >mock-api</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Refreshing keeps the user logged in</th>
+            <td>
+              <ul class="evidence">
+                <li>keeps the user signed in after a reload<span class="file">auth</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Logged-out users go to login; a 401 logs out</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  sends visitors to sign in, then back to the page they asked for<span class="file"
+                    >auth</span
+                  >
+                </li>
+                <li>
+                  signs the user out when the API rejects their session, then brings them back<span
+                    class="file"
+                    >auth</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Switching users leaves nothing behind</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  leaves nothing from the previous user behind when switching accounts<span
+                    class="file"
+                    >auth</span
+                  >
+                </li>
+                <li>
+                  drops responses that arrive after the user who asked for them signed out<span
+                    class="file"
+                    >auth</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr class="group">
+            <th colspan="2">Roles and permissions</th>
+          </tr>
+          <tr>
+            <th>Admin page can’t be reached by URL without permission</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  is hidden from manager users and refuses them when they type its URL<span
+                    class="file"
+                    >permissions</span
+                  >
+                </li>
+                <li>
+                  is hidden from support users and refuses them when they type its URL<span
+                    class="file"
+                    >permissions</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Mock returns 403 for forbidden actions</th>
+            <td>
+              <ul class="evidence">
+                <li>returns 403 when support creates an order<span class="file">mock-api</span></li>
+                <li>returns 403 when manager cancels an order<span class="file">mock-api</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Amounts are never sent to Support</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  never sends order amounts to users without orders.view_amount<span class="file"
+                    >mock-api</span
+                  >
+                </li>
+                <li>
+                  are hidden from support users, who never receive them<span class="file"
+                    >permissions</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>UI handles a 403, not just hidden buttons</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  don't rely on hidden buttons: a 403 is explained and permissions re-checked<span
+                    class="file"
+                    >permissions</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Delivered and cancelled orders are final, even for Admin</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  rejects every change to a delivered order, even from an admin<span class="file"
+                    >mock-api</span
+                  >
+                </li>
+                <li>
+                  rejects every change to a cancelled order, even from an admin<span class="file"
+                    >mock-api</span
+                  >
+                </li>
+                <li>
+                  keep delivered orders locked, even for admins, and say why<span class="file"
+                    >permissions</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Hidden vs disabled, explained</th>
+            <td>
+              <p class="note">
+                Missing permission → hidden. Blocked by order state → disabled with the reason. See
+                README.
+              </p>
+              <ul class="evidence">
+                <li>
+                  keep delivered orders locked, even for admins, and say why<span class="file"
+                    >permissions</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Easy to add roles and permissions</th>
+            <td>
+              <p class="note">
+                The UI checks permissions, never roles. A new role is a server-only change.
+              </p>
+            </td>
+          </tr>
+
+          <tr class="group">
+            <th colspan="2">Mock API</th>
+          </tr>
+          <tr>
+            <th>About 50 generated orders</th>
+            <td>
+              <p class="note">50 deterministic orders from a fixed seed, kept in localStorage.</p>
+            </td>
+          </tr>
+          <tr>
+            <th>POST /auth/login, 401 on wrong credentials</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  returns a token for valid credentials, 401 for wrong ones and 422 for missing
+                  ones<span class="file">mock-api</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>GET /orders?q=&amp;status= filtered by the mock</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  searches by customer or order number and filters by status on the server<span
+                    class="file"
+                    >mock-api</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>GET /orders/:id with line items</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  opens from the keyboard, shows the whole order and closes with Escape<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>POST / PUT orders, 422 per invalid field</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  returns 422 with a message for each invalid field<span class="file"
+                    >mock-api</span
+                  >
+                </li>
+                <li>
+                  creates pending orders and computes the amount itself, ignoring client-sent
+                  values<span class="file">mock-api</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>PATCH status and POST cancel, rules on every write</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  only moves an order one step forward and never cancels through a status
+                  change<span class="file">mock-api</span>
+                </li>
+                <li>returns 403 when support changes a status<span class="file">mock-api</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>User from the Authorization token; 401 if missing or invalid</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  identifies the caller from the token and rejects missing or unknown tokens<span
+                    class="file"
+                    >mock-api</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Random 300–1000 ms delay</th>
+            <td>
+              <p class="note">
+                On every response, errors included. Tests run at 0 ms so they stay fast and
+                deterministic.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <th>Easy way to force errors</th>
+            <td>
+              <p class="note">
+                “Mock API” panel: 500, network, 401, 403 or 422 on the next order request, also with
+                an order's panel open.
+              </p>
+              <ul class="evidence">
+                <li>
+                  explains a failed load and recovers with "Try again"<span class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr class="group">
+            <th colspan="2">Screen</th>
+          </tr>
+          <tr>
+            <th>Number, customer, amount, date, status</th>
+            <td>
+              <ul class="evidence">
+                <li>are shown to managers<span class="file">permissions</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Search and status filter; fast typing is safe</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  searches and filters on the server, keeping both in the URL<span class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>
+                  shows the latest results even when an earlier search responds last<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Details in a side panel</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  opens straight from a link, on top of the filtered list<span class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>shows how far the order has come<span class="file">orders</span></li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Status change and cancel, by permission</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  let managers walk an order through the workflow, but not cancel it<span
+                    class="file"
+                    >permissions</span
+                  >
+                </li>
+                <li>
+                  let admins cancel an order, after confirming<span class="file">permissions</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Loading, no results and errors with retry</th>
+            <td>
+              <p class="note">
+                Skeletons have the shape of the table, phone list, panel and form they stand in for.
+              </p>
+              <ul class="evidence">
+                <li>
+                  explains when nothing matches and clears the filters in one click<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>
+                  explains a failed load and recovers with "Try again"<span class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>
+                  shows the skeleton, not another filter's orders, while a failed load is
+                  retried<span class="file">orders</span>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Mobile and full keyboard use</th>
+            <td>
+              <p class="note">Also checked in real Chrome at 1280 px, 900 px and 375 px.</p>
+              <ul class="evidence">
+                <li>
+                  lists orders as cards that open with the keyboard and get focus back<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>
+                  opens from the keyboard, shows the whole order and closes with Escape<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr class="group">
+            <th colspan="2">Create and edit</th>
+          </tr>
+          <tr>
+            <th>One form for create and edit, with line items and a live total</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  checks the form, then creates the order and shows it in the list and details<span
+                    class="file"
+                    >orders</span
+                  >
+                </li>
+                <li>
+                  edits an order and shows the change in the details and the list<span class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Client validation, and 422 errors under the fields</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  shows the API's 422 errors under the matching fields<span class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>List and details show the saved data</th>
+            <td>
+              <ul class="evidence">
+                <li>
+                  edits an order and shows the change in the details and the list<span class="file"
+                    >orders</span
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 5 · Test results -->
+    <section class="page">
+      <h2>Test results</h2>
+      <p class="intro">
+        The UI tests render the whole app against the mock API and act like a user, using Vitest and
+        Testing Library; the contract tests call the mock API directly. The brief asks for at least
+        two tests, one of them about permissions.
+      </p>
+      <table class="results">
+        <thead>
+          <tr>
+            <th>Suite</th>
+            <th>Covers</th>
+            <th class="num">Tests</th>
+            <th class="num">Passed</th>
+            <th class="num">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>mock-api.test.ts</code></td>
+            <td>The API contract: 401, 403, 409, 422, amounts</td>
+            <td class="num">16</td>
+            <td class="num passed">16</td>
+            <td class="num">0.1 s</td>
+          </tr>
+          <tr>
+            <td><code>auth.test.ts</code></td>
+            <td>Sign-in, sessions, sign-out, stale responses</td>
+            <td class="num">12</td>
+            <td class="num passed">12</td>
+            <td class="num">2.7 s</td>
+          </tr>
+          <tr>
+            <td><code>permissions.test.ts</code></td>
+            <td>What each role sees and can do</td>
+            <td class="num">17</td>
+            <td class="num passed">17</td>
+            <td class="num">2.5 s</td>
+          </tr>
+          <tr>
+            <td><code>orders.test.ts</code></td>
+            <td>List, search, loading, details panel, create and edit</td>
+            <td class="num">27</td>
+            <td class="num passed">27</td>
+            <td class="num">10.3 s</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td></td>
+            <td class="num">72</td>
+            <td class="num passed">72</td>
+            <td class="num">11.5 s</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="beyond">
+        <h3>Beyond the automated tests</h3>
+        <ul class="bullets">
+          <li>
+            Every flow was also exercised in real Chrome with Playwright scripts, at 1280 px and 375
+            px, for each role.
+          </li>
+          <li>
+            Two review rounds with parallel reviewers (requirements, correctness, security,
+            accessibility and UX, code quality), each finding checked by an adversarial verifier.
+            Confirmed issues were fixed, with a regression test where the fix could be tested.
+          </li>
+          <li>
+            A UI pass went through every loading, empty and error state in Chrome at 1280, 900 and
+            375 px, against the dev server and the production build. What it found was fixed, again
+            with a regression test where the fix could be tested.
+          </li>
+        </ul>
+      </div>
+
+      <div class="beyond">
+        <h3>Reproduce</h3>
+        <div class="reproduce">
+          <code>npm install</code>
+          <code>npm test</code>
+          <code>npm run lint</code>
+          <code>npm run build</code>
+        </div>
+      </div>
+
+      <p class="measured">
+        Measured on 21 October 2026 at commit 94b3f5c · Node v24.13.0 · Vitest 4.1.11 · 19 test
+        groups across 4 files.
+      </p>
+    </section>
+  </body>
+</html>

@@ -13,7 +13,7 @@ permission rules as the UI, adds 300–1000 ms of latency to every response, and
 The [project report (PDF)](docs/project-report.pdf) maps each requirement in the brief to the
 passing tests that prove it, with the latest test results. The two-page
 [stack and decisions (PDF)](docs/stack-and-decisions.pdf) explains the libraries and the reasoning
-behind them.
+behind them. Both are printed from HTML in `docs/src/`, with the command at the top of each file.
 
 ## Setup
 
