@@ -124,8 +124,9 @@ About 5 hours in one session:
 
 - ~45 min reading the brief and deciding on the stack and the approach.
 - ~1 h setting up the project and building the features.
-- ~2.5 h reviewing and testing what was built, and fixing what came up. Each fix went into the
-  commit it belonged to, so the history reads feature by feature.
+- ~2.5 h reviewing and testing what was built, and fixing what came up. Fixes from the earlier
+  reviews went into the commits they belonged to, so the history reads feature by feature. The
+  last review's fixes are separate commits, one per fix.
 - ~45 min on this README, the screenshots and the two PDFs.
 
 ## AI assistance
