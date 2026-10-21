@@ -111,6 +111,11 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
   the new filter, with a bar along their top (not in the search box) and "Loading shipped orders…"
   above them. A page or panel still downloading puts a bar under the app bar. Buttons spin while
   their action saves.
+- **Status changes ease in:** the badge fades to the new status's colour. On the progress line the
+  finished step fills in with its check, and the line draws on to the next step, which lights up as
+  the line reaches it. It takes under half a second and animates only colour, `transform` and
+  `opacity`, so nothing is laid out again. Opening an order doesn't animate, and reduced-motion
+  settings skip the animation.
 - **Accessibility:** a table from tablet width up and a list on phones. Everything works by
   keyboard, and focus returns to the order's row when a panel closes. Required fields say so, on
   screen and to screen readers. Touch screens get controls at least 44 px each way, and Windows
