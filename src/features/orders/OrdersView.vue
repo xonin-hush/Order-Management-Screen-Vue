@@ -120,9 +120,29 @@ const isUpdating = computed(
   () => isPlaceholderData.value || searchText.value.trim() !== filters.value.q,
 )
 
-/** Announced to screen readers once results for the current filters have arrived. */
+/**
+ * In place of the list on the first load, while new results load after an empty one ("nothing
+ * matches" would be stale) and while a failed load is retried (the previous filter's results
+ * aren't these). Otherwise the previous results stay, dimmed, until the new ones arrive.
+ */
+const showSkeleton = computed(
+  () =>
+    isPending.value ||
+    (isPlaceholderData.value && (orders.value?.length === 0 || retryingLoad.value)),
+)
+
+/**
+ * The line above the results, announced to screen readers: their count, or, while the previous
+ * results stand in for new filters' ones, which orders are on their way. (The skeleton says it
+ * itself.)
+ */
 const resultsSummary = computed(() => {
-  if (!orders.value || isPlaceholderData.value) return ''
+  if (!orders.value || showSkeleton.value) return ''
+  if (isPlaceholderData.value) {
+    const { q, status: selected } = filters.value
+    const which = selected ? `${STATUS_LABELS[selected].toLowerCase()} orders` : 'orders'
+    return `Loading ${which}${q ? ` matching “${q}”` : ''}…`
+  }
   const count = orders.value.length
   return `${count} ${count === 1 ? 'order' : 'orders'}${hasFilters.value ? ' found' : ''}`
 })
@@ -193,18 +213,15 @@ function returnFocus() {
       <StatusFilter v-model="status" />
     </div>
 
-    <p role="status" class="results-summary mt-4 text-body-medium text-medium-emphasis">
+    <p
+      role="status"
+      class="results-summary mt-4 text-body-medium text-medium-emphasis text-truncate"
+    >
       {{ resultsSummary }}
     </p>
 
     <div class="mt-2">
-      <!-- Also while new results load after an empty one ("nothing matches" would be stale) or
-           after a failed load (the previous filter's results aren't these). -->
-      <OrdersSkeleton
-        v-if="isPending || (isPlaceholderData && (orders?.length === 0 || retryingLoad))"
-        :compact="!isWide"
-        :show-amounts="showAmounts"
-      />
+      <OrdersSkeleton v-if="showSkeleton" :compact="!isWide" :show-amounts="showAmounts" />
 
       <v-card v-else-if="isLoadingError" class="fade-in">
         <ErrorState

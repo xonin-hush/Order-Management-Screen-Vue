@@ -95,6 +95,21 @@ describe('orders list', () => {
     await waitFor(() => expect(listedOrders()).toEqual(ordersMatching({ q: 'ali' })))
   })
 
+  it('says which orders are on their way while new filters load', async () => {
+    const { user } = await renderAs('manager', '/orders', {
+      delay: ({ path, query }) => (path === '/orders' && query.status === 'shipped' ? 200 : 0),
+    })
+    await screen.findAllByRole('rowheader')
+
+    await user.click(screen.getByRole('radio', { name: 'Shipped' }))
+
+    // The previous results stay on screen meanwhile, so the line above them says what's coming.
+    expect(await screen.findByText('Loading shipped orders…')).toBeInTheDocument()
+    const expected = ordersMatching({ status: 'shipped' })
+    expect(await screen.findByText(`${expected.length} orders found`)).toBeInTheDocument()
+    expect(listedOrders()).toEqual(expected)
+  })
+
   it('drops a pending search when the user moves to another page', async () => {
     const { user, router } = await renderAs('admin')
     await screen.findAllByRole('rowheader')
