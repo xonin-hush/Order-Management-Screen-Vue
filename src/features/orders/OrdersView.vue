@@ -97,9 +97,20 @@ function clearFilters() {
   document.getElementById('order-search')?.focus()
 }
 
+/**
+ * A failed load that's tried again goes back to pending, so the previous filter's results would
+ * stand in for it as placeholder data; show the skeleton instead, as on the first load.
+ */
+const retryingLoad = ref(false)
+
 /** After a successful retry the button is gone: don't leave keyboard focus on nothing. */
 async function retryLoading() {
-  await refetch()
+  retryingLoad.value = true
+  try {
+    await refetch()
+  } finally {
+    retryingLoad.value = false
+  }
   if (document.activeElement === document.body) {
     document.querySelector<HTMLElement>('main h1')?.focus()
   }
@@ -187,9 +198,10 @@ function returnFocus() {
     </p>
 
     <div class="mt-2">
-      <!-- Also while new results load after an empty one: "nothing matches" would be stale. -->
+      <!-- Also while new results load after an empty one ("nothing matches" would be stale) or
+           after a failed load (the previous filter's results aren't these). -->
       <OrdersSkeleton
-        v-if="isPending || (isPlaceholderData && orders?.length === 0)"
+        v-if="isPending || (isPlaceholderData && (orders?.length === 0 || retryingLoad))"
         :compact="!isWide"
         :show-amounts="showAmounts"
       />
