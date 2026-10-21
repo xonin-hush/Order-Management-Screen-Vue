@@ -104,7 +104,11 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
   through Vuetify's number input and mock routes through path-to-regexp. The only patterns left
   are Vue Router's route params: `:id(\d+)` only lets numeric ids into the order routes, and
   `(.*)` catches every other address for the 404 page.
-- **Accessibility:** a table on desktop and cards on phones. Everything works by keyboard, and focus
+- **Loading:** each loader sits on what's loading. Skeletons have the shape of the table, phone
+  list, details panel and form they stand in for, so nothing moves when data arrives. A search or
+  filter puts a bar along the top of the results (not in the search box), and a page or panel
+  still downloading puts one under the app bar. Buttons spin while their action saves.
+- **Accessibility:** a table on desktop and a list on phones. Everything works by keyboard, and focus
   returns to the order's row when a panel closes.
 - **Mock data:** 50 deterministic orders kept in `localStorage`, so changes survive a reload.
 
