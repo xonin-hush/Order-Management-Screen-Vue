@@ -27,7 +27,7 @@ function openFromRow(event: MouseEvent, order: OrderSummary) {
 </script>
 
 <template>
-  <v-card :loading="loading">
+  <v-card :loading="loading" class="orders-table">
     <v-table hover>
       <caption class="d-sr-only">
         Orders
@@ -72,6 +72,23 @@ function openFromRow(event: MouseEvent, order: OrderSummary) {
 </template>
 
 <style scoped>
+/* The headings stay in view under the app bar while a long list scrolls. The card clips its
+   corners with `clip`, not `hidden`, which would make it the scroller the header sticks to;
+   from md up the table fits without a scrollbar of its own. */
+.orders-table {
+  overflow: clip;
+}
+
+.orders-table :deep(.v-table__wrapper) {
+  overflow: visible;
+}
+
+.orders-table :deep(thead th) {
+  position: sticky;
+  top: var(--v-layout-top, 0px);
+  z-index: 1;
+}
+
 /* The customer column takes the spare width and truncates long names. */
 .customer {
   width: 100%;
@@ -86,6 +103,8 @@ tbody tr:hover > th {
 .order-link {
   text-decoration: none;
   text-underline-offset: 4px;
+  /* Focused while tabbing back up the list: clear of the sticky headings, not under them. */
+  scroll-margin-top: 3rem;
 }
 
 .order-link:hover {
