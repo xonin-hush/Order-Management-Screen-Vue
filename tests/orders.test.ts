@@ -167,6 +167,31 @@ describe('order details', () => {
     expect(router.currentRoute.value.query).toEqual({ status: 'shipped' })
   })
 
+  it('shows how far the order has come', async () => {
+    const order = seededOrder('shipped')
+    await renderAs('support', `/orders/${order.id}`)
+
+    const panel = await screen.findByRole('dialog', { name: order.number })
+    const progress = await within(panel).findByRole('list', { name: 'Order progress' })
+    const steps = within(progress).getAllByRole('listitem')
+    expect(steps.map((step) => step.textContent?.replace(/\s+/g, ' ').trim())).toEqual([
+      'Pending (done)',
+      'Processing (done)',
+      'Shipped',
+      'Delivered',
+    ])
+    expect(steps[2]).toHaveAttribute('aria-current', 'step')
+  })
+
+  it('leaves cancelled orders off the progress line, which they have left', async () => {
+    const order = seededOrder('cancelled')
+    await renderAs('support', `/orders/${order.id}`)
+
+    const panel = await screen.findByRole('dialog', { name: order.number })
+    expect(await within(panel).findByText(order.customer.address)).toBeInTheDocument()
+    expect(within(panel).queryByRole('list', { name: 'Order progress' })).not.toBeInTheDocument()
+  })
+
   it('explains when an order does not exist', async () => {
     await renderAs('manager', '/orders/9999')
 
