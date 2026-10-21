@@ -162,15 +162,17 @@ const roleLabel = (role: string) => role.charAt(0).toUpperCase() + role.slice(1)
           <p class="mt-1 text-body-small text-medium-emphasis">Pick a role to fill in the form.</p>
           <ul class="mt-3 d-flex flex-column ga-2">
             <li v-for="account in demoAccounts" :key="account.email">
+              <!-- Named by its visible text, so speech users can say what they see. The space
+                   keeps role and email apart in that name; the flex layout doesn't draw it. -->
               <v-btn
                 block
                 variant="text"
                 border
                 class="demo-account"
-                :aria-label="`${roleLabel(account.role)}, ${account.email}`"
                 @click="useDemoAccount(account)"
               >
                 <span class="font-weight-medium">{{ roleLabel(account.role) }}</span>
+                {{ ' ' }}
                 <span class="text-medium-emphasis text-truncate">{{ account.email }}</span>
               </v-btn>
             </li>

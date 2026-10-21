@@ -58,7 +58,7 @@ describe('signing in', () => {
   it('never follows a redirect to another site after signing in', async () => {
     const { user, router } = await renderApp('/login?redirect=//evil.example/phish')
 
-    await user.click(await screen.findByRole('button', { name: 'Admin, admin@example.com' }))
+    await user.click(await screen.findByRole('button', { name: 'Admin admin@example.com' }))
     await user.keyboard('{Enter}')
 
     expect(await screen.findByRole('heading', ordersHeading)).toBeInTheDocument()
@@ -68,7 +68,7 @@ describe('signing in', () => {
   it('fills in a demo account in one click', async () => {
     const { user } = await renderApp('/login')
 
-    await user.click(await screen.findByRole('button', { name: 'Support, support@example.com' }))
+    await user.click(await screen.findByRole('button', { name: 'Support support@example.com' }))
     expect(screen.getByLabelText('Email')).toHaveValue('support@example.com')
     expect(screen.getByRole('button', { name: 'Sign in' })).toHaveFocus()
 
