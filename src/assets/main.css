@@ -84,6 +84,21 @@ body {
   line-height: 1.25rem;
 }
 
+/* Column headings: quieter than the data under them, on a light band of their own. */
+.v-table > .v-table__wrapper > table > thead > tr > th {
+  height: calc(var(--v-table-header-height) - 12px);
+  background: rgb(var(--v-theme-surface-light));
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+  font-size: 0.8125rem;
+}
+
+/* Row headers (an order's number, "Total") are data: Vuetify makes them header-height and
+   unselectable, so an order number couldn't be copied and its row stood taller than the rest. */
+.v-table > .v-table__wrapper > table > :is(tbody, tfoot) > tr > th {
+  height: var(--v-table-row-height);
+  user-select: auto;
+}
+
 /* Label and value side by side, one pair per row: an order's customer, and its skeleton. */
 .detail-rows > * {
   display: grid;
