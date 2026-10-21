@@ -1,5 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
+import { useSessionStore } from '@/features/auth/session.store'
 import { readDb, updateDb } from '@/mocks/db'
 import { DEMO_PASSWORD } from '@/mocks/users'
 import { findAlert, renderApp, renderAs, seededOrder } from './render-app'
@@ -106,13 +107,20 @@ describe('session', () => {
 
   it("offers a way out when the account can't be loaded", async () => {
     breakAccountService()
-    const { user } = await renderAs('manager', '/orders')
+    const { user, pinia } = await renderAs('manager', '/orders')
     await screen.findByRole('heading', { level: 1, name: "We couldn't load your account" })
 
     await user.click(screen.getByRole('button', { name: 'Sign out' }))
 
     expect(await screen.findByRole('heading', signInHeading)).toBeInTheDocument()
     expect(localStorage.getItem('oms.token')).toBeNull()
+    // Including why the account couldn't be loaded: the next user starts from a clean session.
+    expect(useSessionStore(pinia).$state).toEqual({
+      token: null,
+      user: null,
+      status: 'ready',
+      unavailableReason: null,
+    })
   })
 
   it('keeps the user signed in after a reload', async () => {

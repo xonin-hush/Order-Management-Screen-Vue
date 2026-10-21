@@ -38,7 +38,14 @@ export async function renderApp(path = '/', { delay = () => 0 }: MockApiOptions 
     // Real transitions, as in a browser: Vuetify's overlays only unmount once they've finished.
     global: { plugins: [context], stubs: { transition: false, 'transition-group': false } },
   })
-  return { ...view, user, mock, router: context.router, queryClient: context.queryClient }
+  return {
+    ...view,
+    user,
+    mock,
+    router: context.router,
+    queryClient: context.queryClient,
+    pinia: context.pinia,
+  }
 }
 
 /** Seeds a server session and a stored token, as if the user had signed in before a reload. */

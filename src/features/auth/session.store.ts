@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
 import { isApiError } from '@/api/errors'
 import { fetchCurrentUser, requestToken } from './api'
@@ -133,6 +133,7 @@ export const useSessionStore = defineStore('session', () => {
     setToken(null)
     user.value = null
     status.value = 'ready'
+    unavailableReason.value = null
   }
 
   /** For "Try again" after the session couldn't be verified. */
@@ -160,3 +161,8 @@ export const useSessionStore = defineStore('session', () => {
 })
 
 export type SessionStore = ReturnType<typeof useSessionStore>
+
+// In development, edits to this file update the store in place instead of reloading the page.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useSessionStore, import.meta.hot))
+}
