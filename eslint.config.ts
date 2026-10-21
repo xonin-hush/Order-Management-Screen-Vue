@@ -1,16 +1,13 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
 import pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from 'eslint-config-prettier/flat'
 
-// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
-// import { configureVueProject } from '@vue/eslint-config-typescript'
-// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
-// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
-
-export default defineConfigWithVueTs(
+// typescript-eslint and eslint-plugin-vue wired up directly rather than through
+// @vue/eslint-config-typescript, which pulls in fast-glob and with it an unpatched braces advisory.
+export default defineConfig(
   {
     name: 'app/files-to-lint',
     files: ['**/*.{vue,ts,mts,tsx}'],
@@ -18,8 +15,25 @@ export default defineConfigWithVueTs(
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
+  tseslint.configs.recommended,
+  {
+    // The core-rule adjustments typescript-eslint makes for .ts files apply to .vue files too.
+    ...tseslint.configs.eslintRecommended,
+    files: ['**/*.vue'],
+  },
+
+  // After typescript-eslint, whose parser would otherwise win for .vue files.
   ...pluginVue.configs['flat/essential'],
-  vueTsConfigs.recommended,
+  {
+    name: 'app/vue-typescript',
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: { parser: tseslint.parser },
+    },
+    rules: {
+      'vue/block-lang': ['error', { script: { lang: 'ts' } }],
+    },
+  },
 
   {
     name: 'app/rules',
