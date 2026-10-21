@@ -154,6 +154,10 @@ useEventListener(window, 'beforeunload', (event) => {
         {{ formError }}
       </v-alert>
 
+      <!-- Said once, rather than starring every label; the fields are also marked `required`
+           for screen readers. -->
+      <p class="text-body-medium text-medium-emphasis">All fields are required.</p>
+
       <fieldset>
         <legend class="section-title">Customer</legend>
         <div class="mt-4 d-flex flex-column ga-4">
@@ -161,6 +165,7 @@ useEventListener(window, 'beforeunload', (event) => {
             <v-text-field
               id="order-customer-name"
               v-bind="bindField(field)"
+              required
               label="Full name"
               autocomplete="off"
             />
@@ -169,6 +174,7 @@ useEventListener(window, 'beforeunload', (event) => {
             <v-text-field
               id="order-customer-phone"
               v-bind="bindField(field)"
+              required
               label="Mobile number"
               type="tel"
               autocomplete="off"
@@ -180,6 +186,7 @@ useEventListener(window, 'beforeunload', (event) => {
             <v-textarea
               id="order-customer-address"
               v-bind="bindField(field)"
+              required
               label="Delivery address"
               autocomplete="off"
             />
@@ -220,6 +227,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   <v-text-field
                     :id="productFieldId(item.key)"
                     v-bind="bindField(field)"
+                    required
                     label="Product"
                     autocomplete="off"
                     class="mt-3"
@@ -229,6 +237,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   <form.Field v-slot="{ field }" :name="`items[${index}].quantity`">
                     <v-number-input
                       v-bind="bindField(field)"
+                      required
                       label="Quantity"
                       :min="1"
                       control-variant="stacked"
@@ -237,6 +246,7 @@ useEventListener(window, 'beforeunload', (event) => {
                   <form.Field v-slot="{ field }" :name="`items[${index}].unitPrice`">
                     <v-number-input
                       v-bind="bindField(field)"
+                      required
                       label="Unit price (IQD)"
                       placeholder="e.g. 25,000"
                       :min="0"

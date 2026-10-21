@@ -224,6 +224,9 @@ describe('creating and editing orders', () => {
 
     await user.click(screen.getByRole('link', { name: 'New order' }))
     const panel = await screen.findByRole('dialog', { name: 'New order' })
+    // Said once on screen, and announced on each field.
+    expect(within(panel).getByText('All fields are required.')).toBeInTheDocument()
+    expect(within(panel).getByLabelText('Full name')).toBeRequired()
 
     await user.click(within(panel).getByRole('button', { name: 'Create order' }))
     const name = within(panel).getByLabelText('Full name')

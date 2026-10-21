@@ -7,6 +7,7 @@ import SkeletonLine from '@/components/ui/SkeletonLine.vue'
        boxes stand in for the outlined fields. -->
   <div class="side-panel__page">
     <div class="side-panel__scroll d-flex flex-column ga-8">
+      <SkeletonLine :width="150" class="my-1" />
       <div>
         <SkeletonLine :width="72" :height="14" class="my-1" />
         <div class="mt-4 d-flex flex-column ga-4">

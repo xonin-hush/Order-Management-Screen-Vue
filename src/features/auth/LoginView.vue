@@ -110,6 +110,7 @@ const roleLabel = (role: string) => role.charAt(0).toUpperCase() + role.slice(1)
             <form.Field v-slot="{ field }" name="email">
               <v-text-field
                 v-bind="bindField(field)"
+                required
                 label="Email"
                 type="email"
                 autocomplete="username"
@@ -120,6 +121,7 @@ const roleLabel = (role: string) => role.charAt(0).toUpperCase() + role.slice(1)
             <form.Field v-slot="{ field }" name="password">
               <v-text-field
                 v-bind="bindField(field)"
+                required
                 label="Password"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="current-password"
