@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useQueryClient } from '@tanstack/vue-query'
 import { mdiLockOutline } from '@mdi/js'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import SidePanelHeader from '@/components/ui/SidePanelHeader.vue'
 import OrderForm from './components/OrderForm.vue'
+import OrderFormSkeleton from './components/OrderFormSkeleton.vue'
 import { isApiError } from '@/api/errors'
 import OrderLoadError from './components/OrderLoadError.vue'
 import { isFinal } from './domain'
-import { useOrderQuery } from './queries'
+import { findCachedSummary, useOrderQuery } from './queries'
 import type { Order } from './types'
 
 const props = defineProps<{ id: number }>()
@@ -27,7 +29,12 @@ watch(
   { immediate: true },
 )
 
-const title = computed(() => (order.value ? `Edit ${order.value.number}` : 'Edit order'))
+// As in the details panel: the list already knows the order's number.
+const summary = findCachedSummary(useQueryClient(), props.id)
+const title = computed(() => {
+  const number = order.value?.number ?? summary?.number
+  return number ? `Edit ${number}` : 'Edit order'
+})
 const description = computed(() => {
   if (order.value) return "Update the customer's details or what they ordered."
   return isLoadingError.value ? "This order couldn't be loaded." : 'Loading order details…'
@@ -66,9 +73,9 @@ const description = computed(() => {
 
     <OrderForm v-else-if="editing" :order="editing" />
 
-    <div v-else role="status" class="side-panel__scroll">
+    <div v-else role="status" class="side-panel__page">
       <span class="d-sr-only">Loading order details…</span>
-      <v-skeleton-loader aria-hidden="true" type="text@3, card" />
+      <OrderFormSkeleton aria-hidden="true" />
     </div>
   </div>
 </template>
