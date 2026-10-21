@@ -8,6 +8,7 @@ import { errorMessage, isApiError } from '@/api/errors'
 import { formatDateTime, formatMoney } from '@/lib/format'
 import { parseIraqiMobile } from '@/lib/phone'
 import OrderActions from './components/OrderActions.vue'
+import OrderDetailsSkeleton from './components/OrderDetailsSkeleton.vue'
 import OrderLoadError from './components/OrderLoadError.vue'
 import OrderProgress from './components/OrderProgress.vue'
 import StatusBadge from './components/StatusBadge.vue'
@@ -47,7 +48,7 @@ const description = computed(() => {
 })
 
 const showAmounts = computed(() => session.can('orders.view_amount'))
-/** Whether OrderActions will have buttons. */
+/** Whether OrderActions will have buttons, so the skeleton can keep their place. */
 const showActions = computed(
   () =>
     session.can('orders.update_status') ||
@@ -74,10 +75,12 @@ watchEffect(() => {
     <div class="side-panel__scroll">
       <div v-if="isPending" role="status">
         <span class="d-sr-only">Loading order details…</span>
-        <div aria-hidden="true">
-          <v-skeleton-loader type="heading, list-item-three-line" />
-          <v-skeleton-loader type="heading, table-row-divider@3" class="mt-6" />
-        </div>
+        <OrderDetailsSkeleton
+          aria-hidden="true"
+          :status="status"
+          :show-actions="showActions"
+          :show-amounts="showAmounts"
+        />
       </div>
 
       <!-- Also when a refresh finds the order gone: its actions would only fail. -->
@@ -106,7 +109,7 @@ watchEffect(() => {
         <section aria-labelledby="order-customer-heading">
           <h3 id="order-customer-heading" class="section-title">Customer</h3>
           <v-card class="mt-3">
-            <dl class="customer text-body-medium">
+            <dl class="detail-rows text-body-medium">
               <div>
                 <dt>Name</dt>
                 <dd>{{ order.customer.name }}</dd>
@@ -181,18 +184,7 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-.customer > div {
-  display: grid;
-  grid-template-columns: 5.5rem 1fr;
-  gap: 12px;
-  padding: 12px 16px;
-}
-
-.customer > div + div {
-  border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-.customer dt {
+dt {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
