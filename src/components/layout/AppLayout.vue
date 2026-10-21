@@ -14,7 +14,9 @@ function skipToContent() {
   <AppHeader />
   <v-main id="main" tabindex="-1">
     <v-container max-width="1280" class="px-4 px-sm-6 px-lg-8 pt-6 pt-sm-8 pb-16">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <component :is="Component" class="fade-in" />
+      </RouterView>
     </v-container>
   </v-main>
 </template>

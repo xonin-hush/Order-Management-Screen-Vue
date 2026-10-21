@@ -194,7 +194,7 @@ function returnFocus() {
         :show-amounts="showAmounts"
       />
 
-      <v-card v-else-if="isLoadingError">
+      <v-card v-else-if="isLoadingError" class="fade-in">
         <ErrorState
           v-if="isApiError(error, 'forbidden')"
           title="You don't have access to orders"
@@ -213,7 +213,7 @@ function returnFocus() {
       <div
         v-else-if="orders"
         :aria-busy="isPlaceholderData || undefined"
-        class="results"
+        class="results fade-in"
         :class="{ 'results--updating': isPlaceholderData }"
       >
         <ErrorState

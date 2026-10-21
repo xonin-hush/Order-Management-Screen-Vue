@@ -71,7 +71,7 @@ const description = computed(() => {
       </EmptyState>
     </div>
 
-    <OrderForm v-else-if="editing" :order="editing" />
+    <OrderForm v-else-if="editing" :order="editing" class="fade-in" />
 
     <div v-else role="status" class="side-panel__page">
       <span class="d-sr-only">Loading order details…</span>

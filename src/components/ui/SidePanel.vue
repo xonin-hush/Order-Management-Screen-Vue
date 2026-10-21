@@ -93,12 +93,24 @@ function revealFocused(event: FocusEvent) {
   transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.side-panel-enter-from {
+/* Leaving is quicker, and accelerates away: the user is already done with it. */
+.side-panel-leave-active {
+  transition: transform 160ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.side-panel-enter-from,
+.side-panel-leave-to {
   transform: translateX(100%);
 }
 
-.v-locale--is-rtl > .side-panel-enter-from {
+.v-locale--is-rtl > .side-panel-enter-from,
+.v-locale--is-rtl > .side-panel-leave-to {
   transform: translateX(-100%);
+}
+
+/* Swapping what the panel shows (details → edit) fades the new content in. */
+.side-panel__body > .side-panel__page {
+  animation: fade-in 180ms ease-out;
 }
 
 .side-panel__body,

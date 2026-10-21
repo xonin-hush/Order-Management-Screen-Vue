@@ -92,7 +92,7 @@ watchEffect(() => {
       />
 
       <!-- Once loaded, the order stays on screen even if a later refresh fails. -->
-      <div v-else-if="order" class="d-flex flex-column ga-8">
+      <div v-else-if="order" class="d-flex flex-column ga-8 fade-in">
         <ErrorState
           v-if="isRefetchError"
           compact
