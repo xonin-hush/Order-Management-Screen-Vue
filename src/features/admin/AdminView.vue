@@ -8,7 +8,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
   <div>
     <PageHeader title="Admin" description="Settings and tools for administrators." />
 
-    <v-card class="mt-8 border-dashed">
+    <v-card class="mt-6 border-dashed">
       <EmptyState :icon="mdiShieldCheckOutline" title="Nothing here yet" class="py-16">
         <template #description>
           This page is a placeholder. Only people with the
