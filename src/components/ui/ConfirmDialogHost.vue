@@ -68,8 +68,10 @@ function restoreFocus() {
       <v-card-text :id="descriptionId" class="text-body-medium text-medium-emphasis">
         {{ options.description }}
       </v-card-text>
+      <!-- Card actions default their buttons to plain text; the safe choice keeps the app's
+           tonal secondary look, as "Cancel" does beside "Save changes". -->
       <v-card-actions class="flex-wrap justify-end ga-2">
-        <v-btn ref="safeChoice" @click="settleConfirmation(false)">
+        <v-btn ref="safeChoice" variant="tonal" @click="settleConfirmation(false)">
           {{ options.cancelLabel ?? 'Cancel' }}
         </v-btn>
         <v-btn
