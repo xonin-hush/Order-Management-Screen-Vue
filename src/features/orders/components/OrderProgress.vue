@@ -34,7 +34,9 @@ const isDone = (index: number) =>
       :aria-current="index === current ? 'step' : undefined"
     >
       <span class="order-progress__marker" aria-hidden="true">
-        <v-icon v-if="isDone(index)" :icon="mdiCheck" size="14" />
+        <Transition name="check">
+          <v-icon v-if="isDone(index)" :icon="mdiCheck" size="14" class="order-progress__check" />
+        </Transition>
       </span>
       <span class="order-progress__label">
         {{ STATUS_LABELS[step] }}
@@ -47,8 +49,18 @@ const isDone = (index: number) =>
 <style scoped>
 .order-progress {
   --marker-size: 20px;
+  /* A step forward plays in order: the step just done fills in and the line draws out of it,
+     then the next step lights up as the line reaches it. Under half a second in all. */
+  --progress-duration: 250ms;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+}
+
+/* Without motion there's nothing to wait for. */
+@media (prefers-reduced-motion: no-preference) {
+  .order-progress__step--current {
+    --step-delay: 200ms;
+  }
 }
 
 .order-progress__step {
@@ -62,19 +74,37 @@ const isDone = (index: number) =>
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
-/* The line from the previous step's marker to this one's. */
-.order-progress__step + .order-progress__step::before {
+/* The line from the previous step's marker to this one's: a grey track, and over it a fill
+   drawn along it once this step is reached. */
+.order-progress__step + .order-progress__step::before,
+.order-progress__step + .order-progress__step::after {
   content: '';
   position: absolute;
   top: calc(var(--marker-size) / 2 - 1px);
   inset-inline: calc(-50% + var(--marker-size) / 2 + 6px) calc(50% + var(--marker-size) / 2 + 6px);
   height: 2px;
   border-radius: 1px;
+}
+
+.order-progress__step + .order-progress__step::before {
   background: rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
-.order-progress__step + .order-progress__step--reached::before {
+.order-progress__step + .order-progress__step::after {
   background: var(--progress-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    transform var(--progress-duration) ease-out,
+    background-color var(--progress-duration) ease-out;
+}
+
+.order-progress:dir(rtl) .order-progress__step::after {
+  transform-origin: right;
+}
+
+.order-progress__step + .order-progress__step--reached::after {
+  transform: none;
 }
 
 .order-progress__marker {
@@ -86,6 +116,10 @@ const isDone = (index: number) =>
   border-radius: 50%;
   background: rgb(var(--v-theme-surface));
   color: rgb(var(--v-theme-surface));
+  transition-property: border-color, background-color;
+  transition-duration: var(--progress-duration);
+  transition-timing-function: ease-out;
+  transition-delay: var(--step-delay, 0s);
 }
 
 .order-progress__step--reached .order-progress__marker {
@@ -98,17 +132,41 @@ const isDone = (index: number) =>
   background: rgb(var(--v-theme-surface));
 }
 
-.order-progress__step--active .order-progress__marker::after {
+/* The dot and the check share the middle of the marker, the check on top. */
+.order-progress__marker::before,
+.order-progress__check {
+  grid-area: 1 / 1;
+}
+
+.order-progress__marker::before {
   content: '';
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--progress-color);
+  transform: scale(0);
+  transition: transform var(--progress-duration) ease-out var(--step-delay, 0s);
+}
+
+.order-progress__step--active .order-progress__marker::before {
+  transform: none;
+}
+
+.check-enter-active {
+  transition:
+    transform var(--progress-duration) ease-out var(--step-delay, 0s),
+    opacity var(--progress-duration) ease-out var(--step-delay, 0s);
+}
+
+.check-enter-from {
+  transform: scale(0.5);
+  opacity: 0;
 }
 
 .order-progress__label {
   max-width: 100%;
   overflow-wrap: anywhere;
+  transition: color var(--progress-duration) ease-out var(--step-delay, 0s);
 }
 
 .order-progress__step--reached .order-progress__label {
@@ -127,7 +185,8 @@ const isDone = (index: number) =>
   }
 
   .order-progress__marker,
-  .order-progress__step + .order-progress__step::before {
+  .order-progress__step + .order-progress__step::before,
+  .order-progress__step + .order-progress__step::after {
     forced-color-adjust: none;
   }
 
@@ -139,10 +198,6 @@ const isDone = (index: number) =>
 
   .order-progress__step + .order-progress__step::before {
     background: GrayText;
-  }
-
-  .order-progress__step + .order-progress__step--reached::before {
-    background: var(--progress-color);
   }
 
   .order-progress__step--active .order-progress__marker {
