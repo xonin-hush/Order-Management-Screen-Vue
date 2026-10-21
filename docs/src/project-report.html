@@ -178,8 +178,8 @@
       }
 
       .evidence-table tbody th {
-        padding-top: 4.5pt;
-        padding-bottom: 4.5pt;
+        padding-top: 4.25pt;
+        padding-bottom: 4.25pt;
         font-size: 9.75pt;
         font-weight: 500;
         line-height: 1.38;
@@ -187,12 +187,12 @@
       }
 
       .evidence-table tbody td {
-        padding-top: 5pt;
-        padding-bottom: 4.5pt;
+        padding-top: 4.75pt;
+        padding-bottom: 4.25pt;
       }
 
       .evidence-table .group th {
-        padding-top: 9pt;
+        padding-top: 8pt;
         border-bottom-color: var(--hair-strong);
         font-size: 7.5pt;
         font-weight: 600;
@@ -290,10 +290,10 @@
       </p>
 
       <div class="stats">
-        <div class="stat"><b class="ok">72/72</b><span>tests passing</span></div>
+        <div class="stat"><b class="ok">73/73</b><span>tests passing</span></div>
         <div class="stat"><b>31</b><span>brief requirements mapped</span></div>
-        <div class="stat"><b>40</b><span>tests cited as evidence</span></div>
-        <div class="stat"><b>11.5 s</b><span>full test run</span></div>
+        <div class="stat"><b>41</b><span>tests cited as evidence</span></div>
+        <div class="stat"><b>12.4 s</b><span>full test run</span></div>
       </div>
 
       <div class="shots">
@@ -321,7 +321,7 @@
             <tr>
               <td>Tests</td>
               <td><code>npm test</code></td>
-              <td class="num"><span class="pill">72 passed · 0 failed</span></td>
+              <td class="num"><span class="pill">73 passed · 0 failed</span></td>
             </tr>
             <tr>
               <td>Lint</td>
@@ -854,9 +854,14 @@
             <th>Loading, no results and errors with retry</th>
             <td>
               <p class="note">
-                Skeletons have the shape of the table, phone list, panel and form they stand in for.
+                First loads show skeletons; new filters keep the old results and say what's coming.
               </p>
               <ul class="evidence">
+                <li>
+                  says which orders are on their way while new filters load<span class="file"
+                    >orders</span
+                  >
+                </li>
                 <li>
                   explains when nothing matches and clears the filters in one click<span
                     class="file"
@@ -988,18 +993,18 @@
           <tr>
             <td><code>orders.test.ts</code></td>
             <td>List, search, loading, details panel, create and edit</td>
-            <td class="num">27</td>
-            <td class="num passed">27</td>
-            <td class="num">10.3 s</td>
+            <td class="num">28</td>
+            <td class="num passed">28</td>
+            <td class="num">10.8 s</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td>Total</td>
             <td></td>
-            <td class="num">72</td>
-            <td class="num passed">72</td>
-            <td class="num">11.5 s</td>
+            <td class="num">73</td>
+            <td class="num passed">73</td>
+            <td class="num">12.4 s</td>
           </tr>
         </tfoot>
       </table>
@@ -1035,7 +1040,7 @@
       </div>
 
       <p class="measured">
-        Measured on 21 October 2026 at commit 94b3f5c · Node v24.13.0 · Vitest 4.1.11 · 19 test
+        Measured on 21 October 2026 at commit f6dc36d · Node v24.13.0 · Vitest 4.1.11 · 19 test
         groups across 4 files.
       </p>
     </section>
