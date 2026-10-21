@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter, type RouteLocationRaw } from 'vue-router'
-import { useDisplay } from 'vuetify'
+import { useMediaQuery } from '@vueuse/core'
 import { mdiInboxOutline, mdiMagnifyClose, mdiPlus } from '@mdi/js'
 import { errorMessage, isApiError } from '@/api/errors'
 import PageHeader from '@/components/layout/PageHeader.vue'
@@ -26,8 +26,9 @@ const SEARCH_DEBOUNCE_MS = 300
 const route = useRoute()
 const router = useRouter()
 const session = useSessionStore()
-// The table needs room for five columns; below that, orders are cards.
-const { mdAndUp: isWide } = useDisplay()
+// From tablet width the five columns fit, with room left for customer names; below that,
+// orders are cards.
+const isWide = useMediaQuery('(min-width: 768px)')
 
 const filters = computed(() => readFilters(route.query))
 const hasFilters = computed(() => filters.value.q !== '' || filters.value.status !== null)

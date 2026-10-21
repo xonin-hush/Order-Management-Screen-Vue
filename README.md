@@ -111,7 +111,7 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
   the new filter, with a bar along their top (not in the search box) and "Loading shipped orders…"
   above them. A page or panel still downloading puts a bar under the app bar. Buttons spin while
   their action saves.
-- **Accessibility:** a table on desktop and a list on phones. Everything works by keyboard, and focus
+- **Accessibility:** a table from tablet width up and a list on phones. Everything works by keyboard, and focus
   returns to the order's row when a panel closes.
 - **Mock data:** 50 deterministic orders kept in `localStorage`, so changes survive a reload.
 

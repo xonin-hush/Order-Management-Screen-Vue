@@ -74,7 +74,7 @@ function openFromRow(event: MouseEvent, order: OrderSummary) {
 <style scoped>
 /* The headings stay in view under the app bar while a long list scrolls. The card clips its
    corners with `clip`, not `hidden`, which would make it the scroller the header sticks to;
-   from md up the table fits without a scrollbar of its own. */
+   from 768px, where it's shown, the table fits without a scrollbar of its own. */
 .orders-table {
   overflow: clip;
 }
