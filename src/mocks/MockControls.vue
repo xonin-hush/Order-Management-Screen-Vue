@@ -13,6 +13,7 @@ const session = useSessionStore()
 const queryClient = useQueryClient()
 
 const open = ref(false)
+const titleId = useId()
 const failureHeadingId = useId()
 
 // Picking a failure arms it for the next matching request(s); it switches itself off after.
@@ -62,12 +63,20 @@ async function resetData() {
       </template>
 
       <!-- Capped at the space above the button. On short screens the middle scrolls, between a
-           header and footer that stay put. -->
-      <v-card :flat="false" :border="false" elevation="4" class="mock-controls__panel">
+           header and footer that stay put. A non-modal dialog: titled, with its own controls,
+           and the page behind it stays usable. -->
+      <v-card
+        role="dialog"
+        :aria-labelledby="titleId"
+        :flat="false"
+        :border="false"
+        elevation="4"
+        class="mock-controls__panel"
+      >
         <!-- A title, and a way out on touch screens, where Escape isn't to hand. -->
         <div class="d-flex align-start ga-3 px-4 pt-4">
           <div class="flex-grow-1 min-w-0">
-            <h2 class="text-title-medium font-weight-semibold">Mock API</h2>
+            <h2 :id="titleId" class="text-title-medium font-weight-semibold">Mock API</h2>
             <p class="text-body-small text-medium-emphasis">
               A stand-in backend, running in your browser.
             </p>
