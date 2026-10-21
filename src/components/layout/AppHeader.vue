@@ -107,3 +107,15 @@ async function signOut() {
     />
   </v-app-bar>
 </template>
+
+<style scoped>
+/* High-contrast modes drop the tint on the current page's link; mark it as the status filter
+   marks its choice. */
+@media (forced-colors: active) {
+  nav .v-btn[aria-current='page'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+</style>

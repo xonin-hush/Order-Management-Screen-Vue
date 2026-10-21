@@ -118,4 +118,35 @@ const isDone = (index: number) =>
 .order-progress__step--current .order-progress__label {
   font-weight: 600;
 }
+
+/* High-contrast modes drop the fills that tell done, current and upcoming steps apart; draw
+   them in system colours: reached in the selection colour, the rest in grey. */
+@media (forced-colors: active) {
+  .order-progress {
+    --progress-color: Highlight;
+  }
+
+  .order-progress__marker,
+  .order-progress__step + .order-progress__step::before {
+    forced-color-adjust: none;
+  }
+
+  .order-progress__marker {
+    border-color: GrayText;
+    background: Canvas;
+    color: HighlightText;
+  }
+
+  .order-progress__step + .order-progress__step::before {
+    background: GrayText;
+  }
+
+  .order-progress__step + .order-progress__step--reached::before {
+    background: var(--progress-color);
+  }
+
+  .order-progress__step--active .order-progress__marker {
+    background: Canvas;
+  }
+}
 </style>

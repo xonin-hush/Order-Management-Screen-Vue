@@ -52,4 +52,14 @@ const options: { value: OrderStatus | null; label: string }[] = [
 .status-option:hover .v-chip--variant-text {
   background: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
 }
+
+/* High-contrast modes replace the fill that marks the chosen status; use the system's own
+   selection colours instead. */
+@media (forced-colors: active) {
+  .status-option input:checked + .v-chip {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
 </style>
