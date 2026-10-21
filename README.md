@@ -27,6 +27,9 @@ npm run build   # type-check + production build
 npm run lint    # oxlint + ESLint
 ```
 
+Tests are in `tests/`. `tests/permissions.test.ts` covers what each role can see and do, pages
+opened by typing their URL, and how the UI handles the API's 403s.
+
 ### Test users
 
 All three use the password **`password123`**. The sign-in page can fill them in for you.
