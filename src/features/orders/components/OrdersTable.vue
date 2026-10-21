@@ -9,6 +9,8 @@ const props = defineProps<{
   /** Only for users with `orders.view_amount`; the API doesn't send amounts otherwise. */
   showAmounts: boolean
   linkTo: (order: OrderSummary) => RouteLocationRaw
+  /** New results are on their way: a bar runs along the top edge. */
+  loading?: boolean
 }>()
 
 const router = useRouter()
@@ -25,7 +27,7 @@ function openFromRow(event: MouseEvent, order: OrderSummary) {
 </script>
 
 <template>
-  <v-card>
+  <v-card :loading="loading">
     <v-table hover>
       <caption class="d-sr-only">
         Orders

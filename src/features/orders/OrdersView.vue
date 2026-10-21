@@ -178,12 +178,7 @@ function returnFocus() {
 
     <!-- Side by side, the search gives up width before a status chip has to wrap. -->
     <div class="toolbar mt-6">
-      <SearchField
-        v-model="searchText"
-        class="toolbar__search"
-        :searching="isUpdating"
-        @submit="applySearch"
-      />
+      <SearchField v-model="searchText" class="toolbar__search" @submit="applySearch" />
       <StatusFilter v-model="status" />
     </div>
 
@@ -254,13 +249,21 @@ function returnFocus() {
             </template>
           </EmptyState>
         </v-card>
+        <!-- The loader sits on the results, whichever control changed them. -->
         <OrdersTable
           v-else-if="isWide"
           :orders="orders"
           :show-amounts="showAmounts"
           :link-to="orderLink"
+          :loading="isUpdating"
         />
-        <OrderCards v-else :orders="orders" :show-amounts="showAmounts" :link-to="orderLink" />
+        <OrderCards
+          v-else
+          :orders="orders"
+          :show-amounts="showAmounts"
+          :link-to="orderLink"
+          :loading="isUpdating"
+        />
       </div>
     </div>
 
@@ -307,7 +310,10 @@ function returnFocus() {
   transition: opacity 200ms;
 }
 
+/* Results that no longer match the filters fade back, after a beat, so a fast reply doesn't
+   make the list blink. */
 .results--updating {
   opacity: 0.6;
+  transition-delay: 150ms;
 }
 </style>

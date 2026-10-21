@@ -5,11 +5,6 @@ import { mdiClose, mdiMagnify } from '@mdi/js'
 
 const model = defineModel<string>({ required: true })
 
-defineProps<{
-  /** Results for the current text are on their way. */
-  searching?: boolean
-}>()
-
 const emit = defineEmits<{
   /** Enter, or clearing the field: apply now instead of waiting for the debounce. */
   submit: [value: string]
@@ -41,7 +36,6 @@ function clear() {
       class="search-field"
     >
       <template #append-inner>
-        <v-progress-circular v-if="searching" indeterminate size="16" width="2" color="secondary" />
         <v-btn
           v-if="model"
           :icon="mdiClose"
