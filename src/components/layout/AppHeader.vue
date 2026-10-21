@@ -6,12 +6,14 @@ import { useDisplay } from 'vuetify'
 import { mdiLogout } from '@mdi/js'
 import { endSession } from '@/features/auth/end-session'
 import { useSessionStore } from '@/features/auth/session.store'
+import { useNavigationProgress } from '@/lib/navigation-progress'
 import BrandMark from './BrandMark.vue'
 
 const session = useSessionStore()
 const router = useRouter()
 const queryClient = useQueryClient()
 const { xs: phone } = useDisplay()
+const navigating = useNavigationProgress(router)
 
 // Destinations the user can't open aren't shown at all (see README: hidden vs disabled).
 const navigation = computed(() => {
@@ -94,5 +96,14 @@ async function signOut() {
         </v-btn>
       </div>
     </v-container>
+    <v-progress-linear
+      :active="navigating"
+      indeterminate
+      absolute
+      location="bottom"
+      height="2"
+      color="primary"
+      aria-label="Loading page"
+    />
   </v-app-bar>
 </template>
