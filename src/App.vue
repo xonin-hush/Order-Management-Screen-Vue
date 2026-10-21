@@ -2,6 +2,7 @@
 import { inject, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { devToolsKey } from '@/app/dev-tools'
+import BrandMark from '@/components/layout/BrandMark.vue'
 import ConfirmDialogHost from '@/components/ui/ConfirmDialogHost.vue'
 import { useSessionSync } from '@/features/auth/session-sync'
 import { useSessionStore } from '@/features/auth/session.store'
@@ -34,8 +35,12 @@ watch(
 
 <template>
   <v-app>
-    <div v-if="!routerReady" role="status" class="d-flex align-center justify-center h-screen">
-      <v-progress-circular indeterminate size="24" width="2" color="secondary" />
+    <!-- Restoring the session takes up to a second. Fades in late, so a fast start doesn't flash. -->
+    <div v-if="!routerReady" role="status" class="boot centered-page">
+      <div class="boot__content d-flex flex-column align-center ga-5" aria-hidden="true">
+        <BrandMark :size="44" />
+        <v-progress-linear indeterminate rounded height="3" color="primary" class="boot__bar" />
+      </div>
       <span class="d-sr-only">Loading OrderDesk…</span>
     </div>
 
@@ -56,3 +61,19 @@ watch(
     />
   </v-app>
 </template>
+
+<style scoped>
+.boot__content {
+  animation: boot-in 240ms ease-out 300ms both;
+}
+
+.boot__bar {
+  width: 6rem;
+}
+
+@keyframes boot-in {
+  from {
+    opacity: 0;
+  }
+}
+</style>
