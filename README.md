@@ -17,7 +17,7 @@ behind them. Both are printed from HTML in `docs/src/`, with the command at the 
 
 ## Setup
 
-Requires Node 22.18+ or 24.12+.
+Requires Node 22.22.2+, 24.15+ or 26+.
 
 ```bash
 npm install
