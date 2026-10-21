@@ -400,10 +400,10 @@ describe('when the API fails', () => {
     await screen.findAllByRole('rowheader')
 
     // Arm a server error from the Mock API panel, then load another view.
-    await user.click(screen.getByText(/Mock API/))
-    ;(await screen.findByLabelText('Simulate a failure')).focus()
-    await user.keyboard('{Enter}')
-    await user.click(await screen.findByRole('option', { name: 'Server error (500)' }))
+    await user.click(screen.getByRole('button', { name: /Mock API/ }))
+    const failures = await screen.findByRole('radiogroup', { name: 'Simulate a failure' })
+    await user.click(within(failures).getByRole('radio', { name: 'Server error (500)' }))
+    expect(screen.getByRole('button', { name: /Failure armed/ })).toBeInTheDocument()
     armFailure('server-error', 1) // tests don't retry automatically: one failure is enough
     await user.click(screen.getByRole('radio', { name: 'Shipped' }))
 

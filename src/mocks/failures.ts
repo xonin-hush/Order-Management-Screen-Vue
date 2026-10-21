@@ -14,15 +14,13 @@ export const FAILURE_MODES = [
     label: 'Server error (500)',
     // Loads are retried once automatically, so fail twice to reach the error screen.
     times: 2,
-    description:
-      'The next order request fails (for a load, its automatic retry too); trying again works.',
+    description: 'The next order request fails with a 500; trying again works.',
   },
   {
     value: 'network-error',
     label: 'Network error',
     times: 2,
-    description:
-      'The next order request fails as if the connection dropped (for a load, its retry too).',
+    description: 'The next order request gets no answer, as if the connection dropped.',
   },
   {
     value: 'unauthorized',
