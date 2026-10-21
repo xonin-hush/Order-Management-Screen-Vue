@@ -27,7 +27,7 @@ defineProps<{
           class="px-4 py-3"
         >
           <span class="d-flex align-center justify-space-between ga-3">
-            <span class="text-body-medium font-weight-semibold tabular-nums">
+            <span class="text-body-medium font-weight-medium tabular-nums">
               {{ order.number }}
             </span>
             <StatusBadge :status="order.status" />
@@ -37,10 +37,7 @@ defineProps<{
             <time :datetime="order.createdAt" class="text-medium-emphasis">
               {{ formatRelativeDate(order.createdAt) }}
             </time>
-            <span
-              v-if="showAmounts && order.amount !== undefined"
-              class="font-weight-medium tabular-nums"
-            >
+            <span v-if="showAmounts && order.amount !== undefined" class="tabular-nums">
               {{ formatMoney(order.amount) }}
             </span>
           </span>
