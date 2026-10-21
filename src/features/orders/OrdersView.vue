@@ -191,6 +191,7 @@ function returnFocus() {
       <OrdersSkeleton
         v-if="isPending || (isPlaceholderData && orders?.length === 0)"
         :compact="!isWide"
+        :show-amounts="showAmounts"
       />
 
       <v-card v-else-if="isLoadingError">
