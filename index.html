@@ -5,6 +5,21 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Manage customer orders: search, review, update and create orders." />
+    <!-- Vuetify's cascade layers, in order, before any stylesheet loads. Layers are ordered by
+         first appearance, and the build links shared component CSS ahead of the file that
+         declares them, which put components below the base styles (16px button text). -->
+    <style>
+      @layer vuetify-core {
+        @layer reset, base;
+      }
+      @layer vuetify-components, vuetify-overrides;
+      @layer vuetify-utilities {
+        @layer theme-base, typography, helpers, theme-background, theme-foreground;
+      }
+      @layer vuetify-final {
+        @layer transitions, trumps;
+      }
+    </style>
     <title>OrderDesk</title>
   </head>
   <body>
