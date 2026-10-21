@@ -72,6 +72,14 @@ body {
   opacity: var(--v-medium-emphasis-opacity);
 }
 
+/* Fields take the corners of the buttons, cards and alerts around them (`lg`). Not with the
+   `rounded` default: Vuetify draws any rounded outlined field as a pill, moving its label inward. */
+@layer vuetify-overrides {
+  .v-field {
+    border-radius: 8px;
+  }
+}
+
 /* Programmatic focus targets (headings, panels, banners) aren't controls, so no ring. */
 [tabindex='-1']:focus {
   outline: none;

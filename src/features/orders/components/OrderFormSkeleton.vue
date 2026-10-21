@@ -53,7 +53,7 @@ import SkeletonLine from '@/components/ui/SkeletonLine.vue'
   height: 48px;
   padding-inline: 16px;
   border: thin solid rgba(var(--v-border-color), 0.2);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .field--tall {
