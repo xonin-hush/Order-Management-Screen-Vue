@@ -42,7 +42,8 @@ All three use the password **`password123`**. The sign-in page can fill them in 
 
 The **Mock API** panel (bottom left) makes the next order request fail with a 500, a network error,
 a 401, a 403 or a 422, then switches itself off, so you see both the error and the recovery. Reads
-fail twice, to get past their one automatic retry.
+fail twice, to get past their one automatic retry. It stays usable while an order's panel is open, so
+a failure can be armed for the order on screen.
 
 ## Permission model
 
