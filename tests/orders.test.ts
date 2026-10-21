@@ -400,6 +400,23 @@ describe('when the API fails', () => {
     expect(await screen.findAllByRole('rowheader')).not.toHaveLength(0)
   })
 
+  it("shows the skeleton, not another filter's orders, while a failed load is retried", async () => {
+    const { user } = await renderAs('manager', '/orders', {
+      delay: ({ path, query }) => (path === '/orders' && query.status === 'shipped' ? 200 : 0),
+    })
+    await screen.findAllByRole('rowheader')
+    armFailure('server-error', 1)
+    await user.click(screen.getByRole('radio', { name: 'Shipped' }))
+    await screen.findByRole('heading', { name: "We couldn't load the orders" })
+
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+
+    // The retry is on its way: placeholders, and none of the unfiltered list's orders.
+    expect(await screen.findByText('Loading orders…')).toBeInTheDocument()
+    expect(listedOrders()).toEqual([])
+    await waitFor(() => expect(listedOrders()).toEqual(ordersMatching({ status: 'shipped' })))
+  })
+
   it('keeps what is on screen, and unsaved edits, when a background refresh fails', async () => {
     const order = seededOrder('pending')
     const { user, queryClient } = await renderAs('manager', `/orders/${order.id}/edit`)
