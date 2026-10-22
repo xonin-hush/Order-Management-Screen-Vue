@@ -336,7 +336,8 @@
             Code asks <code>session.can('orders.cancel')</code>. Roles exist only on the server, so
             a new role needs no client change. With no permission, an action is <b>hidden</b>: it
             never applies to this user. Allowed but blocked by the order’s state, it is
-            <b>disabled with the reason</b> on screen.
+            <b>disabled with the reason</b> on screen. No CASL: <code>/me</code> sends a flat list,
+            and order-state rules aren’t permissions.
           </p>
         </div>
         <div class="decision">

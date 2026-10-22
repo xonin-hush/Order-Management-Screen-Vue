@@ -87,6 +87,7 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
 | Forms | TanStack Form | Form state and when to validate (on submit, then as you type). A 422's errors land under their fields and stay with their line item when another one is removed |
 | Server state | TanStack Vue Query | Each search has its own cache entry, so a slow older response can't replace newer results. Also gives cancellation, refetching after writes, and one `clear()` on sign-out |
 | Session | Pinia (one store) | Who is signed in and what they may do |
+| Permissions | `session.can()`, no library | `GET /me` sends a flat list of permission names, so a check is one lookup, and a misspelt name fails the type-check. CASL is for rules about an order's fields, like "only my orders". The one such rule here (delivered and cancelled orders are final) is a workflow rule, answered with 409, not a permission |
 | HTTP | axios | Interceptors attach the token and turn every failure into one typed `ApiError`. Required by the mock adapter |
 | Validation | zod | One schema for the form and the mock, so 422 field paths match the form's fields |
 | Phone numbers | libphonenumber-js | Knows which Iraqi numbers are mobiles, in any notation, and stores them in one format |
