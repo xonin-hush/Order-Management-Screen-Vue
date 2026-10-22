@@ -139,7 +139,7 @@ and errors shaped `{ message, code?, errors? }`. In production I'd move the toke
 
 ## Time spent
 
-About 5 hours in one session:
+About 6 hours in one session:
 
 - ~45 min reading the brief and deciding on the stack and the approach.
 - ~1 h setting up the project and building the features.
@@ -147,6 +147,7 @@ About 5 hours in one session:
   reviews went into the commits they belonged to, so the history reads feature by feature. The
   last review's fixes are separate commits, one per fix.
 - ~45 min on this README, the screenshots and the two PDFs.
+- ~1 h on Improving UI/UX, Accessibility and Animations, and on the project report.
 
 ## AI assistance
 
